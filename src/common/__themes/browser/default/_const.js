@@ -1,3 +1,3 @@
-export const _main_ = '#18a06a'
-// export const _main_ = '#3ac'
-// const green0 = '#31aacc'
+export const _main_ = '#311'
+export const _active_ = '#311'
+export const _selected_ = '#fec'

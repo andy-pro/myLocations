@@ -1,24 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import chroma from 'chroma-js'
+import shortid from 'js-shortid'
 
 import { categoryAction } from './actions'
-import { removeSpecial, getSlug, findDuplicate, testColor } from '../__lib/utils'
+import { resetMenu } from '../app/actions'
+import { removeSpecial, findDuplicate } from '../__lib/utils'
 import { Form, View, TextInput, Icon, Checkbox, Alert, FormWrapper } from '../__components';
 
-import { mainCSS, iconBtnCSS, checkboxCSS } from '../__themes'
-// import { iconBtn as iconBtnCSS } from '../__themes'
+import { colors, mainCSS, iconBtnCSS, checkboxCSS } from '../__themes'
 
 class CategoryMenu extends Component {
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.entry !== this.props.entry) {
-      const { isChild, title, color } = nextProps.entry
+  shouldComponentUpdate({ mode, entry }) {
+    let editMode = mode === 'edit',
+        newEntry = entry !== this.props.entry && editMode,
+        newMode = mode !== this.props.mode && editMode
+    if (newEntry || newMode) {
       this.props.fields.__setState({
-        add: '',
-        title: isChild ? title : '',
-        color: (isChild && color) ? color : '',
-        preserve: false
+        name: entry.name
       })
       setTimeout(this.setFocus)
       return false
@@ -26,165 +25,68 @@ class CategoryMenu extends Component {
     return true
   }
 
-  componentDidMount() { this.setFocus() }
+  componentWillMount() {
+    let { mode, entry, fields } = this.props
+    if (mode === 'edit') {
+      fields.__setState({
+        name: entry.name
+      })     
+    }
+  }
+
+  componentDidMount() {
+    this.setFocus() 
+  }
 
   setFocus = () => {
-    if (this.props.enable) this.props.fields.__refs.add.focus()
+    if (this.props.mode) this.props.fields.__refs.name.focus()
   }
 
-  onAddSubmit = e => {
-    let data = this.props.fields.__submits.onAddSubmit(e)
-    if (data) this.onSubmit(data)
-  }
-
-  onTitleSubmit = e => {
-    let data = this.props.fields.__submits.onTitleSubmit(e)
-    if (data) this.onSubmit(data)
-  }
-
-  onColorSubmit = e => {
-    let data = this.props.fields.__submits.onColorSubmit(e)
-    this.onSubmit(data)
-  }
-
-  onSubmit = data => {
-    let field = Object.keys(data)[0],
-        value = data[field]
-    const { entry, enable } = this.props;
-    let { path, parentPath, isChild } = entry
-    if (!enable) return
-    if (value === entry[field]) return
-    let cmd
-    data = {}
-
-    switch (field) {
-      case 'add':
-        path = path + (isChild ? '.sub' : '')
-        parentPath = path
-        cmd = 'add'
-        // data.color = ?
-        // console.log('add', JSON.stringify(entry));
-        break
-      case 'title':
-        if (!isChild) return
-        cmd = 'update'
-        break
-      case 'color':
-        if (!isChild) return
-        // console.log('colors:', value, entry[field]);
-        if (value) {
-          value = checkColor(value)
-          if (!value) return
-        }
-        cmd = 'update'
-        data.color = value
+  onSubmit = e => {
+    let data = this.props.fields.__submits.onSubmit(e)
+    if (!data) return
+    // console.log('data', data, this.props.entry);
+    let { mode, list, entry } = this.props,
+        { name } = data,
+        _add = mode === 'add'
+    // if (name === entry.name) return
+    if (findDuplicate(list, name)) {
+      return Alert.alert('The same entry already exists!')
     }
-
-    if (field === 'add' || field === 'title') {
-      let slug = getSlug(value)
-      if (findDuplicate(entry.list, slug, parentPath, value)) {
-        return Alert.alert('The same entry already exists!')
-      }
-      data.title = value
-      if (entry.rootPath === 'categories') {
-        data.slug = slug        
-      }
-      // console.log('entry', entry);
+    if (_add) data.id = shortid.gen()
+    let payload = { data }
+    if (mode === 'edit') payload.id = entry.id
+    this.props.categoryAction(payload, mode)
+    if (_add) {
+      this.props.fields.__resetState(0)
+    } else {
+      this.props.resetMenu()
     }
-
-    this.props.categoryAction({ path, data }, cmd)
-  }
-
-  onDelete = e => {
-    let data = this.props.fields.__submits.onDelete(e)
-    // console.log(JSON.stringify(data));
-    let {entry} = this.props
-    Alert.alert(
-      `Delete entry "${entry.title}"`,
-      'Are you shure?',
-      [
-        {text: 'Cancel', style: 'cancel'},
-        {text: 'OK', onPress: () => this.props.categoryAction(entry, 'del')},
-      ],
-      { cancelable: false }
-    )
   }
 
   render() {
-    const { fields, entry, enable } = this.props;
-    const isChild = Boolean(entry.isChild)
-    // console.log('category menu render', fields.add);
-
+    let { fields, mode, entry } = this.props
+    // console.log('category menu render', fields.name);
+    // ios-paper-plane-outline
     return (
         <View style={mainCSS.form}>
 
           <Form
             style={mainCSS.row}
-            onSubmit={this.onAddSubmit}
+            onSubmit={this.onSubmit}
           >
             <TextInput
-              placeholder={isChild ? 'New subentry' : 'New entry'}
-              editable={enable}
-              { ...fields.add }
+              placeholder={mode === 'add' ? 'New entry' : 'Edit entry'}
+              { ...fields.name }
               { ...this.propSet0 }
             />
             <Icon.Button
-              name='ios-add-circle-outline'
-              backgroundColor={enable ? '#18a06a' : '#ddd'}
-              onPress={this.onAddSubmit}
+              name={mode === 'add' ? 'ios-add-circle-outline' : 'ios-create-outline'}
+              backgroundColor={colors.success}
+              onPress={this.onSubmit}
               style={iconBtnCSS}
             />
           </Form>
-
-          <Form
-            style={mainCSS.row}
-            onSubmit={this.onTitleSubmit}
-          >
-            <TextInput
-              placeholder={'Rename'}
-              editable={isChild}
-              { ...fields.title }
-              { ...this.propSet0 }
-            />
-            <Icon.Button
-              name='ios-create-outline'
-              backgroundColor={isChild ? '#18a06a' : '#ddd'}
-              onPress={this.onTitleSubmit}
-              style={iconBtnCSS}
-            />
-          </Form>
-
-          <Form
-            style={mainCSS.row}
-            onSubmit={this.onColorSubmit}
-          >
-            <TextInput
-              placeholder={'Color'}
-              editable={isChild}
-              { ...fields.color }
-              { ...this.propSet0 }
-            />
-            <Icon.Button
-              name='ios-color-palette-outline'
-              backgroundColor={isChild ? checkColor(fields.color.value, '#ddd') : '#ddd'}
-              onPress={this.onColorSubmit}
-              style={iconBtnCSS}
-            />
-          </Form>
-
-          <View style={mainCSS.between}>
-            <Checkbox
-              label='Preserve references'
-              disabled={!isChild}
-              { ...fields.preserve }
-            />
-            <Icon.Button
-              name='ios-remove-circle-outline'
-              backgroundColor={isChild ? '#d66' : '#ddd'}
-              onPress={isChild ? this.onDelete : null}
-              style={iconBtnCSS}
-            />
-          </View>
 
         </View>
 
@@ -203,26 +105,9 @@ class CategoryMenu extends Component {
 
 }
 
-export default FormWrapper([
-  { submit: 'onAddSubmit', fields: { fn: 'add', vd: 'required', pp: removeSpecial } },
-  { submit: 'onTitleSubmit', fields: { fn: 'title', vd: 'required', pp: removeSpecial } },
-  { submit: 'onColorSubmit', fields: { fn: 'color' } },
-  { submit: 'onDelete', fields: { fn: 'preserve', type: 'checkbox', init: false } },
-])(connect(null, { categoryAction })(CategoryMenu))
-
-// const previewColor = (v, defv) =>
-//   testColor(v) ? '#'+ v : defv
-
-const checkColor = (v, defv) => {
-  try {
-    v = chroma(v).name()
-    return v
-  } catch (e) {
-    if (defv) {
-      return defv
-    } else {
-      Alert.alert('Unknown color')
-      return false
-    }
-  }
-}
+export default FormWrapper(
+  { submit: 'onSubmit', fields: { fn: 'name', vd: 'required', pp: removeSpecial } },
+)(connect(
+  null,
+  { categoryAction, resetMenu }
+)(CategoryMenu))

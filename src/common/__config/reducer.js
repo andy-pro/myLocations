@@ -1,13 +1,8 @@
 import { combineReducers } from 'redux';
 
 import app from '../app/reducer';
-import user from '../user/reducer';
-// import categories from '../categories/reducer';
-import transactions from '../transactions/reducer';
-
-import configureLocalDB from './localdb';
-
-import __config from '../config'
+import categories from '../categories/reducer';
+import locations from '../locations/reducer';
 
 // stackoverflow.com/q/35622588/233902
 const resetStateOnSignOutReducer = (reducer, initialState) => (state, action) => {
@@ -25,13 +20,8 @@ const configureReducer = initialState => {
 
   let reducer = {
     app,
-    user,
-    // categories,
-    transactions,
-  }
-
-  if (__config.storage === 'local') {
-    reducer[configureLocalDB.filename] = configureLocalDB.reducer
+    categories,
+    locations,
   }
 
   // The power of higher-order reducers, http://slides.com/omnidan/hor

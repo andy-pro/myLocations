@@ -54,149 +54,34 @@ export const slugifyCategory = (category) =>
     .filter(c => Boolean(c))
     .join('/')
 
-export const getCategoryBySlug = (slug, list) => {
-  let category = slug.split('/'),
-      errLevel = 0,
-      path = 'categories'
-  let title = category.map(s => {
-    let c = list && list.find((item, i) => {
-      let result = s === item.slug
-      if (result) {
-        list = item.sub
-        path += `.${i}.sub`
-      }
-      return result
-    })
-    // return c ? c.title : 'ERROR!---' + slug + '---'
-    // return c ? c.title : slug
-    if (c) return c.title
-    else {
-      errLevel++
-      // path = list
-      return s
-    }
-  })
-  .join(' / ')
-  return {
-    slug,
-    category,
-    title,
-    errLevel,
-    path,
-  }
+export const findDuplicate = (list, name) => {
+  name = name.toLowerCase()
+  return list ? list.find(item => 
+    item.name.toLowerCase() === name
+  ) : false;
 }
 
-// const getCategoryByPath = (list, path) => {
-//   // path.split('.').forEach(step => list = list[step])
-//   path = path.split('.')
-//   path.shift()
-//   for (let i = 0, len = path.length; i < len; i++) {
-//     let step = path[i]
-//     if (step === 'sub' && !list[step]) {
-//       // new subcategory
-//       list.sub = []
-//       // return list.sub = [] // ? working anywere?
-//       return list.sub
-//     }
-//     list = list[step]
-//   }
-//   return list
-// }
+export const getNameById = (list, id) => 
+  list.find(item => item.id === id).name
 
-const getCategoryByPath = (list, path) => {
-  // path.split('.').forEach(step => list = list[step])
-  path = path.split('.')
-  let parent = list,
-      index = 0,
-      root = path.shift()
-  // list = Array.isArray(list) ? list[0] : list[root]
-  list = list[0] ? list[0] : list[root]
-  // console.log('getCategoryByPath:', path, 'list:', list);
-  for (let i = 0, len = path.length; i < len; i++) {
-    let step = path[i]
-    if (step === 'sub' && !list[step]) {
-      // new subcategory
-      list.sub = []
-      // return list.sub = [] // ? working anywere?
-      return {
-        entry: list.sub,
-        parent: list
-      }
-    }
-    parent = list
-    list = list[step]
-    index = step
-  }
-  return {
-    entry: list,
-    parent,
-    index
-  }
-}
-
-export { getCategoryByPath }
-
-export const findDuplicate = (list, slug, path, title) => {
-  list = getCategoryByPath(list, path).entry
-  console.log('find duplicate', list, slug, path, title);
-  return list ? list.find(item => {
-    // item.title.toLowerCase() === title.toLowerCase()
-    return (item.slug) ?
-      item.slug.toLowerCase() === slug.toLowerCase()
-      :
-      item.title.toLowerCase() === title.toLowerCase()
-  }) : false;
-}
-
-
-export const cmdCategoryLocal = (user, { cmd, payload }) => {
-  let { path, data, index, parentPath } = payload
-
+export const cmdUpdateLocal = (list, { cmd, payload }) => {
+  let { data, id } = payload
+  console.log('utils', cmd, payload);
   switch (cmd) {
     case 'add':
-      getCategoryByPath(user, path).entry.push(data)
-      break
-    case 'update':
-      Object.assign(getCategoryByPath(user, path).entry, data)
-      break
-    case 'del':
-      getCategoryByPath(user, parentPath).entry.splice(index, 1)
-      break
+      return pushItem(list, data)
+
+    case 'edit':
+      return updateItemById(list, id , data)
+
+    case 'remove':
+      return deleteItemById(list, payload)
   
     default:
-      return user
+      return list
   }
 
-
-  // return user.map(item => item)
-  // return Object.assign({}, user)
-  return { ...user }
-  // return user
-  // console.log('r', r);
 }
-
-/*
-export const addCategoryToPath = (list, { path, data }) => {
-  let target = getCategoryByPath(list, path)
-  target.push(data)
-  return list.map(item => item)
-}
-
-export const updateCategoryByPath = (list, { path, data }) => {
-  console.log('updateCategoryByPath', list, path, data);
-  let target = getCategoryByPath(list, path).category
-  Object.assign(target, data)
-  return list.map(item => item)
-}
-
-export const delCategoryByPath = (list, { index, parentPath }) => {
-  let target = getCategoryByPath(list, parentPath)
-  // target.push(data)
-  // console.log('del', target, index);
-  target.splice(index, 1)
-  return list.map(item => item)
-}
-*/
 
 /* =============  Immutability helpers  ================== */
 
@@ -225,23 +110,3 @@ export const deleteItemsByIds = (list, ids) => {
     return true
   })
 }
-// function update(list, element, key, set) {
-//   let value = element[key]
-//   return list.map(item =>
-//     item[key] === value ? Object.assign(item, set) : item
-//   )
-// }
-
-//
-// export const getElementSize = el => {
-//   let display = el.style.display;
-//   if (display === 'none' && el.offsetHeight === 0) {
-//     el.style.display = 'block';
-//   }
-//   let size = {
-//     width: el.offsetWidth,
-//     height: el.offsetHeight
-//   }
-//   el.style.display = display;
-//   return size;
-// }

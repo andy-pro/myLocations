@@ -39,6 +39,7 @@ const configureStore = options => {
   }
 
   // Enable hot reloading for reducers.
+  /*
   if (module.hot && typeof module.hot.accept === 'function') {
     if (__config.isNative) {
       // React Native for some reason needs accept without the explicit path.
@@ -55,6 +56,7 @@ const configureStore = options => {
       });
     }
   }
+*/
 
   return store;
 };

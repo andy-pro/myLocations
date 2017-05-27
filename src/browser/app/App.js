@@ -8,26 +8,40 @@ import Helmet from 'react-helmet';
 import * as themes from './themes';
 import Page from './Page';
 
-import Menu from '../../common/__components/Menu';
+import { View } from '../../common/__components';
 import favicon from '../../common/app/favicon';
-import { appStart, appStop } from '../../common/app/actions';
+import { appStart, appStop, resetMenu } from '../../common/app/actions';
+import { categoryAction } from '../../common/categories/actions'
 import showNotify from '../../common/__components/notify';
-
-import { Box, Container } from './components';
+import { deleteConfirm } from '../../common/__components/Dialogs'
 
 // Pages
-import TransactionsPage from '../../common/transactions/TransactionsPage';
+import HomePage from '../../common/home/HomePage';
 import CategoriesPage from '../../common/categories/CategoriesPage';
-import BackupPage from '../../common/backup/BackupPage';
-import IntlPage from '../intl/IntlPage';
-import MePage from '../me/MePage';
-import NotFoundPage from '../notfound/NotFoundPage';
+import LocationsPage from '../../common/locations/LocationsPage';
+import MapPage from '../../common/map/MapPage';
 
 class App extends Component {
 
   componentDidMount() {
     // Must be called after the initial render to match server rendered HTML.
     this.props.appStart();
+    document.onkeydown = e => {
+      // console.log('e.keyCode', e.keyCode);
+      // esc
+      if (e.keyCode == 27 && this.props.cmdToolbar) { 
+        this.props.resetMenu()
+        return false;
+      }
+      // delete
+      /*
+      if (e.keyCode == 46 && this.props.activeEntry) {
+        let { entry } = this.props.activeEntry
+        deleteConfirm(entry.name, () => this.props.categoryAction(entry.id, 'remove'))
+        return false;
+      }
+      */
+    }
   }
 
   componentWillUnmount() {
@@ -35,7 +49,10 @@ class App extends Component {
     this.props.appStop();
   }
 
-  shouldComponentUpdate({ notify }, nextState) {
+  shouldComponentUpdate({ cmdToolbar, activeEntry, notify }, nextState) {
+    if (cmdToolbar !== this.props.cmdToolbar || activeEntry !== this.props.activeEntry) {
+      return false
+    }
     if (notify !== this.props.notify) {
       showNotify(notify, this.props.messages)
       return false
@@ -51,7 +68,7 @@ class App extends Component {
         key={themeName} // Enforce rerender.
         theme={theme}
       >
-        <Container>
+        <View>
           <Helmet
             htmlAttributes={{ lang: currentLocale }}
             meta={[
@@ -64,21 +81,16 @@ class App extends Component {
             link={[
               ...favicon.link,
             ]}
+            script={[
+              //{ type: "text/javascript", src: "https://maps.googleapis.com/maps/api/js?key=AIzaSyAZaRY770THMIy_Oa03SUiluEUxh4f3skw&extension=.js" },
+              { type: "text/javascript", src: "https://maps.googleapis.com/maps/api/js" },
+            ]}
           />
-          <Menu />
-          <Box marginLeft={6} padding={1} position='relative'>
-            <Page pattern="/" exactly component={TransactionsPage} />
-            <Page pattern="/single" component={TransactionsPage} />
-            <Page pattern="/group" component={TransactionsPage} />
-            <Page pattern="/income" component={TransactionsPage} />
-            <Page pattern="/delete" component={TransactionsPage} />
-            <Page pattern="/categories" component={CategoriesPage} />
-            <Page pattern="/backup" component={BackupPage} />
-            <Page pattern="/settings" component={IntlPage} />
-            <Page authorized pattern="/me" component={MePage} />
-            <Miss component={NotFoundPage} />
-          </Box>
-        </Container>
+          <Page pattern="/" exactly component={HomePage} />
+          <Page pattern="/categories" component={CategoriesPage} />
+          <Page pattern="/locations" component={LocationsPage} />
+          <Page pattern="/map" component={MapPage} />
+        </View>
       </ThemeProvider>
     );
   }
@@ -87,11 +99,13 @@ class App extends Component {
 
 export default connect(
   ({ app }) => ({
+    cmdToolbar: app.cmdToolbar,
+    activeEntry: app.activeEntry,
     notify: app.notify,
     messages: app.messages,
     currentLocale: app.currentLocale,
     themeName: app.currentTheme,
     theme: themes[app.currentTheme] || themes.defaultTheme,
   }),
-  { appStart, appStop }
+  { appStart, appStop, resetMenu, categoryAction }
 )(App);

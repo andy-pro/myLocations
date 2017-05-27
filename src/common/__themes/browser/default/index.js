@@ -2,36 +2,51 @@ import * as CONST from './_const'
 
 import categoriesCSS from './categories'
 import suggestionsCSS from './suggestions'
-import transactionsCSS from './transactions'
+import locationsCSS from './locations'
 import headerCSS from './header'
 
 const colors = {
   header: CONST._main_,
-  touch: '#dfd',
-  active: CONST._main_,
-  disabled: '#ddd',
+  touch: '#eee',
+  active: CONST._active_,
+  selected: CONST._selected_,
+  icon: '#eee',
+  disabled: '#555',
   alarm: '#d66',
+  success: '#18a06a',
 }
+
+const fontFamily = 'Arial, sans-serif'
 
 const mainCSS = {
 
   root: {
     // flex: 1,
-    fontFamily: 'Arial, sans-serif',
-    // paddingHorizontal: 5
+    fontFamily,
+    position: 'absolute',
+    top: 70,
+    bottom: 50,
+    left: 0,
+    right: 0,
+  },
+
+  fixContainer: {
+    marginHorizontal: 'auto',
+    maxWidth: 450,
   },
 
   container: {
-    // display: 'flex',
-    paddingHorizontal: 15,
-    // justifyContent: 'space-between',
+    marginHorizontal: 15,
+    paddingVertical: 10,
+    // marginTop: 70,
+    marginBottom: 50,
   },
 
   form: {
     // flex: 1,
-    paddingTop: 5,
+    // paddingTop: 15,
     paddingBottom: 10,
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
     // backgroundColor: '#ffd',
   },
 
@@ -53,7 +68,19 @@ const mainCSS = {
     // justify-content: flex-start (default) | flex-end | center | space-between | space-around
     justifyContent: 'space-between',
   },
-
+  pullRightRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  pullRightCol: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+  },
+  active: {
+    backgroundColor: colors.selected,
+  },
   // text-type input
   input: {
     width: 0,
@@ -87,19 +114,19 @@ const mainCSS = {
     height: 42,
     marginTop: 10,
     // color: '#aaa',
-  }
-
-}
-
-const datePickerCSS = {
-  container: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
-  text: {
-    color: '#555',
+  link: {
+    textDecoration: 'none',
+    ':hover': {
+      textDecoration: 'underline',
+    },
+    cursor: 'pointer',
+    color: 'white',
+    fontSize: 16,
+    fontFamily,
+    marginRight: 16,
   },
+
 }
 
 // global button styles for Ionicons
@@ -157,8 +184,7 @@ export {
   mainCSS,
   categoriesCSS,
   suggestionsCSS,
-  transactionsCSS,
-  datePickerCSS,
+  locationsCSS,
   buttonCSS,
   checkboxCSS,
   headerCSS,

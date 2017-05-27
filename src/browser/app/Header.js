@@ -1,24 +1,21 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-
-import { Box, Title } from './components';
-import { View } from '../../common/__components'
+import { View, Text, HeaderBar, Title } from '../../common/__components'
 import { colors, mainCSS, headerCSS } from '../../common/__themes'
-import { HeaderBar } from '../../common/__components'
 
 const iconStyles = {
-  set1: {},
-  set2: {},
+  margin: 5
 }
 
 let iconColors = {
   common: colors.header,
-  datePicker: '#bbb',
   active: '#fff',
   disabled: '#fff',
   bgActive: colors.active,
+  // bgActive: '#311',
   bgDisabled: colors.disabled,
+  // bgDisabled: '#822',
   bgDelete: colors.alarm,
   delete: '#fff',
 }
@@ -28,15 +25,9 @@ const Header = ({ messages, pattern }) => {
   const title = messages[`links.${pattern.slice(1) || 'home'}.title`]
 
   return (
-    <Box>
+    <View style={headerCSS.root}>
       <Title message={title} />
-      <Box
-        border="bottom"
-        borderWidth={2}
-        marginBottom={0.5}
-        marginTop={0}
-        paddingBottom={0.5}
-      >
+      <View style={mainCSS.fixContainer}>
         <HeaderBar
           style={headerCSS}
           iconStyles={iconStyles}
@@ -44,8 +35,8 @@ const Header = ({ messages, pattern }) => {
           pattern={pattern}
           title={title}
         />
-      </Box>
-    </Box>
+      </View>
+    </View>
   )
 
 }

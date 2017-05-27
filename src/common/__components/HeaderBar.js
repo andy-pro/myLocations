@@ -2,111 +2,91 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { View, Text, Icon } from './'
-import { changeCategoryView, changeStatsMode } from '../app/actions'
-import { mainCSS, datePickerCSS } from '../__themes'
-import Summary from '../transactions/summary'
-import DatePicker from './DatePicker'
+import { cmdToolbar } from '../app/actions'
+import { deleteConfirm } from './Dialogs'
+import { colors, mainCSS } from '../__themes'
 
-const view_names = {
-  table: { name: 'table', title: 'Table', icon: 'md-list-box' },
-  grid:  { name: 'grid', title: 'Grid', icon: 'md-grid' },
-  stats: { name: 'stats', title: 'Diagram', icon: 'md-stats' },
-  pie:   { name: 'pie', title: 'Pie', icon: 'md-pie' },
+const icons = {
+  add:    { name: 'add', title: 'Add', icon: 'ios-add-circle-outline' },
+  remove: { name: 'remove', title: 'Remove', icon: 'ios-remove-circle-outline', dis: true, confirm: true },
+  edit:   { name: 'edit', title: 'Edit', icon: 'ios-create-outline', dis: true },
+  view:   { name: 'view', title: 'View', icon: 'ios-eye-outline', dis: true },
+  map:    { name: 'map', title: 'Map view', icon: 'ios-globe', dis: true, to: '/map' },
+  sort:   { name: 'sort', title: 'Sort', icon: 'md-shuffle' },
 }
 
-const HeaderBar = ({ title, pattern, currentBalance, changeCategoryView, changeStatsMode, delHandler, iconStyles, iconColors, statsMode, style }) => {
+const HeaderBar = ({ title, pattern, iconStyles, iconColors, style, activeEntry, cmdToolbar }, { router }) => {
 
   let _home = pattern === '/',
-      _delete = pattern === '/delete'
+      _cats = pattern ==='/categories',
+      _locs = pattern ==='/locations',
+      entryName = activeEntry ? activeEntry.entry.name : ''
 
-  const iconSet = (name, onPress) => ({
-    ...iconStyles.set2,
-    backgroundColor: statsMode === name ? iconColors.bgActive : iconColors.bgDisabled,
-    color: statsMode === name ? iconColors.active : iconColors.disabled,
-    name: view_names[name].icon,
-    onPress: () => {
-      if (name !== statsMode) changeStatsMode(name)
-    },
-    title: view_names[name].title,
-  })
+  const __cmd = icon => {
+    if (icon.to) {
+      return router.transitionTo(icon.to)
+    }
+    let cb = () => cmdToolbar({ name: icon.name, pattern, activeEntry })
+    if (icon.confirm) {
+      // console.log('activeEntry', activeEntry);
+      deleteConfirm(entryName, cb)
+    } else cb()
+  }
 
-  const DeleteButton = ({ onPress, children, bgColor }) =>
-    <Icon.Button
-      { ...iconStyles.set1 }
-      backgroundColor={bgColor || iconColors.bgDelete}
-      color={iconColors.delete}
-      name='ios-trash-outline'
-      onPress={onPress}
-    >
-      {children}
-    </Icon.Button>
-
-  const deleteMonth = () => delHandler({ deleteMonth: true })
+  const iconSet = (name) => {
+    let icon = icons[name],
+        dis = icon.dis && !activeEntry
+    let set = {
+      style: { ...iconStyles },
+      backgroundColor: iconColors.bgActive,
+      color: dis ? colors.disabled : colors.icon,
+      name: icon.icon,
+      title: icon.title,
+    }
+    if (!dis) {
+      set.onPress = () => __cmd(icon)
+    }
+    return set
+  }
 
   return (
-    <View style={style.bar}>
+    <View style={{paddingHorizontal: 15}}>
 
-      <View style={style.lside}>
-        <Text style={style.title}>
+      <View style={style.title}>
+        <Text style={style.text}>
           {title}
         </Text>
-        {(_home || _delete) &&
-          <View style={style.summary}>
-            <Summary value={currentBalance} />
-          </View>
-        }
       </View>
 
-      {(_home || pattern === '/backup' || _delete) &&
-
-        <View style={style.rside}>
-          <View style={style.picker}>
-            <DatePicker
-              icon={{ ...iconStyles.set1, backgroundColor: iconColors.datePicker }}
-              style={datePickerCSS}
-            />
+      {(_cats || _locs) &&
+        <View style={mainCSS.between}>
+          <View style={style.toolbar}>
+            {_locs && <Icon.Button { ...iconSet('map') } /> }
+            <Text style={style.subtext}>
+              {entryName}
+            </Text>
           </View>
-          {_home &&
-            <View style={style.stats}>
-              <Icon.Button { ...iconSet('table') } />
-              <Icon.Button { ...iconSet('grid') } />
-              <Icon.Button { ...iconSet('stats') } />
-              <Icon.Button { ...iconSet('pie') } />
-            </View>
-          }
-          {_delete &&
-            <View style={style.stats}>
-              <DeleteButton onPress={deleteMonth} bgColor={iconColors.bgDelete}>
-                Month
-              </DeleteButton>
-              <DeleteButton onPress={delHandler} />
-            </View>
-          }
+          <View style={style.toolbar}>
+            <Icon.Button { ...iconSet('add') } />
+            <Icon.Button { ...iconSet('remove') } />
+            <Icon.Button { ...iconSet('edit') } />
+            {/*<Icon.Button { ...iconSet('view') } />*/}
+            {_locs && <Icon.Button { ...iconSet('sort') } /> }         
+          </View>
         </View>
-
       }
-      {pattern === '/categories' &&
-        <Icon.Button
-          { ...iconStyles.set1 }
-          backgroundColor={iconColors.common}
-          name="ios-eye-outline"
-          onPress={changeCategoryView}
-        />
-      }
-      {delHandler && !_delete &&
-        <DeleteButton onPress={delHandler} />
-      }
-
 
     </View>
   )
 }
 
+HeaderBar.contextTypes = {
+  router: React.PropTypes.object,
+};
+
 export default connect(
   ({ app }) => ({
-    statsMode: app.statsMode,
-    currentBalance: app.currentBalance,
-    delHandler: app.delHandler,
+    activeEntry: app.activeEntry,
   }),
-  { changeCategoryView, changeStatsMode },
+  { cmdToolbar }
 )(HeaderBar);

@@ -2,18 +2,13 @@ import { getCurrentDate } from '../__lib/dateUtils'
 
 const initialState = {
   currentTheme: 'defaultTheme',
-  currentBalance: 0,
   error: null,
   notify: null,
   menuShown: false,
   online: false,
   started: false,
-  date: getCurrentDate(),
-  categoryMapView: true,
-  userAssetScanned: false,
-  delHandler: null,
-  statsMode: 'table',
-  fetching: true,
+  activeEntry: null,
+  cmdToolbar: null,
 
   currentLocale: null,
   defaultLocale: null,
@@ -44,7 +39,7 @@ const reducer = (state=initialState, action) => {
   }
 
   if (type.startsWith('notify/')) {
-    return { ...state, notify: action.opts.notify };
+    state = { ...state, notify: action.opts.notify };
   }
 
   switch (type) {
@@ -61,11 +56,22 @@ const reducer = (state=initialState, action) => {
     case 'APP_START':
       return { ...state, started: true };
 
-    case 'MONTH_CHANGED':
-      return { ...state, date: payload };
+    case 'SET_ACTIVE_ENTRY':
+      return { ...state, activeEntry: payload };
 
-    case 'SET_THEME':
-      return { ...state, currentTheme: payload.theme };
+    case 'RESET_ACTIVE_ENTRY':
+      return { ...state, activeEntry: null }
+
+    case 'categories/UPDATED':
+    case 'notify/categories/UPDATED':
+      if (action.cmd === 'remove') {
+        state = { ...state, activeEntry: null }
+        if (state.cmdToolbar && state.cmdToolbar.name === 'edit') state.cmdToolbar = null
+      }
+      return state
+
+    case 'RESET_MENU':
+      return { ...state, cmdToolbar: null }
 
     case 'persist/REHYDRATE':
       if (payload.app && payload.app.currentLocale)
@@ -75,29 +81,8 @@ const reducer = (state=initialState, action) => {
     case 'SET_CURRENT_LOCALE':
       return setLocale(state, payload)
 
-    case 'CHANGE_CATEGORY_VIEW':
-      return { ...state, categoryMapView: !state.categoryMapView };
-
-    case 'SCAN_USER_ASSET':
-      return { ...state, userAssetScanned: true };
-
-    case 'SET_BALANCE':
-      return { ...state, currentBalance: payload }
-
-    case 'SET_DEL_HANDLER':
-      return { ...state, delHandler: payload }
-
-    case 'CHANGE_STATS_MODE':
-      return { ...state, statsMode: payload }
-
-    case 'epic/transactions/GET':
-    case 'epic/categories/GET':
-      return { ...state, fetching: true }
-
-    case 'user/LOADED':
-    case 'transactions/GOTTEN':
-    case 'db/EXPORT':
-      return { ...state, fetching: false }
+    case 'CMD_TOOLBAR':
+      return { ...state, cmdToolbar: payload };
 
     default:
       return state;

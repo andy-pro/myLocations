@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import createIconButtonComponent from './iconButton';
+import createIconButton from './iconButton';
 
 const createIconSet = (glyphMap) => {
 
@@ -14,7 +14,7 @@ const createIconSet = (glyphMap) => {
     }
   }
 
-  Icon.Button = createIconButtonComponent(Icon);
+  Icon.Button = createIconButton(Icon);
 
   return Icon;
 }

@@ -12,6 +12,8 @@ const glyphMap = {
   'ios-add-circle-outline': require('./io/android-add-circle').default,
   'ios-remove-circle-outline': require('./io/android-remove-circle').default,
   'ios-eye-outline': require('./io/ios-eye').default,
+  'ios-globe': require('./io/ios-globe').default,
+  'md-shuffle': require('./io/md-shuffle').default,
 
   'md-list-box': require('./io/stat/android-list').default,
   'md-grid': require('./io/stat/ios-grid-view').default,

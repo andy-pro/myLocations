@@ -2,11 +2,14 @@ import HeaderBar from '../HeaderBar'
 import Match from '../Match'
 import Checkbox from '../Checkbox'
 import FormWrapper from '../FormWrapper'
+import Footer from '../Footer'
 // import TwistedView from '../TwistedView'
+import Icon from './icons/Ionicons'
+import IconLink from './IconLink'
+import Link from './Link'
 import ListView from './ListView'
-import Icon from './icons/Ionicons';
-import Link from '../../../browser/app/components/Link'
 import MenuLink from './MenuLink'
+import Title from './Title'
 // import Picker from './Picker'
 // import DatePicker from './DatePicker'
 
@@ -49,11 +52,14 @@ export {
   Checkbox,
   ListView,
   Icon,
+  IconLink,
   Alert,
   Link,
   MenuLink,
   Picker,
+  Title,
   FormWrapper,
+  Footer,
   // TwistedView,
   // DatePicker,
 }

@@ -4,7 +4,7 @@ import * as CONST from './_const'
 import headerCSS from './header'
 import categoriesCSS from './categories'
 import suggestionsCSS from './suggestions'
-import transactionsCSS from './transactions'
+import locationsCSS from './locations'
 
 const colors = {
   header: CONST._main_,
@@ -140,7 +140,7 @@ export {
   headerCSS,
   categoriesCSS,
   suggestionsCSS,
-  transactionsCSS,
+  locationsCSS,
   checkboxCSS,
   datePickerCSS,
   iconBtnCSS,

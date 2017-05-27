@@ -1,30 +1,37 @@
+import * as CONST from './_const'
+
 const header = {
-  bar: {
+  root: {
+    backgroundColor: '#311',
+    position: 'fixed',
+    top: 0,
+    height: '70',
+    width: '100%',
+    color: 'white',
+    zIndex: 1,
+  },
+  title: {
     paddingHorizontal: 15,
     display: 'flex',
     alignItems: 'flex-start',
     // justify-content: flex-start (default) | flex-end | center | space-between | space-around
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
-  lside: {
-    textAlign: 'center',
-  },
-  rside: {
-    width: 130,
-  },
-  title: {
+  text: {
     fontSize: 24,
   },
-  summary: {
-    paddingTop: 11
+  subtext: {
+    fontSize: 18,
+    // paddingLeft: 10,
+    // lineHeight: '46px',
+    marginTop: 3,
+    color: CONST._selected_,
+    whiteSpace: 'nowrap',
   },
-  picker: {
-
-  },
-  stats: {
+  toolbar: {
     display: 'flex',
     paddingTop: 10,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
 }
 

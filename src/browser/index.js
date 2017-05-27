@@ -10,6 +10,8 @@ ReactDOM.render(<Root />, appElement);
 
 // Hot reload render.
 // gist.github.com/gaearon/06bd9e2223556cb0d841#file-native-js
+/*
+*/
 if (module.hot && typeof module.hot.accept === 'function') {
   module.hot.accept('./app/Root', () => {
     const NextRoot = require('./app/Root').default;

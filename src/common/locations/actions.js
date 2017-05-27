@@ -1,6 +1,6 @@
-export const categoryAction = (payload, cmd, opts) => ({
+export const locationAction = (payload, cmd, opts) => ({
   type: 'epic/UPDATE',
-  list: 'categories',
+  list: 'locations',
   payload,
   cmd, // add, update, del, replace
   opts,

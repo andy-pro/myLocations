@@ -29,13 +29,15 @@ const categories = {
   },
   item: {
     fontSize: 14,
-    paddingVertical: 2,
+    paddingVertical: 6,
     paddingHorizontal: 6,
-    marginVertical: 2,
-    display: 'inline-block',
-    borderRadius: 5,
+    marginBottom: -1,
+    // marginVertical: 2,
+    // display: 'inline-block',
+    // borderRadius: 5,
+    border: '1px solid #ddd',
     cursor: 'pointer',
-  }
+  },
 }
 
 export default categories

@@ -8,9 +8,10 @@ export default function createIconButtonComponent(Icon) {
   return class IconButton extends Component {
 
     render() {
-      const { type, color='white', backgroundColor, onPress, children, title, ...props } = this.props;
+      const { type, color='white', buttonStyle, backgroundColor, onPress, children, title, ...props } = this.props;
       const style ={
         ...buttonCSS,
+        ...buttonStyle,
         backgroundColor,
         color,
         cursor: 'pointer',

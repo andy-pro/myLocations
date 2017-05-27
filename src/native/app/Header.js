@@ -25,7 +25,6 @@ const iconStyles = {
 
 let iconColors = {
   common: colors.header,
-  datePicker: colors.header,
   active: '#fff',
   disabled: '#48d09a',
   bgActive: colors.header,

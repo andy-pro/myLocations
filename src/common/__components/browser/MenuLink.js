@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 
-import Link from '../../../browser/app/components/Link'
+import Link from './Link'
 
-const MenuLink = ({ exactly, to, message, action }) => {
+const MenuLink = ({ exactly, to, message, action, children }) => {
 
   return (
     <Link
@@ -14,7 +14,9 @@ const MenuLink = ({ exactly, to, message, action }) => {
       paddingHorizontal={0.7}
       paddingVertical={0.3}
       to={action || to}
+      message={message}
     >
+      {children}
       {message}
     </Link>
   )

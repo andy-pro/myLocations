@@ -12,6 +12,11 @@ export const View = create(
   ['data-path', 'onKeyDown', 'onPress']
 )
 
+export const AnchorLink = create(
+  'a',
+  ['download', 'href', 'target']
+)
+
 export const Form = create(
   'form',
   ['onSubmit', 'onKeyDown']
@@ -50,12 +55,12 @@ export const ScrollView = create(
 
 export const Image = create(
   'img',
-  ['source']
+  ['source', 'width']
 )
 
 const Select = create(
   'select',
-  ['onValueChange', 'enabled']
+  ['selectedValue', 'onValueChange', 'enabled', '$ref']
 )
 
 const Option = create(

@@ -165,6 +165,7 @@ const wrapper = forms => WrappedComponent => {
           // value = fields[fn].fileList.find(item => item.name === n)
         }
         let valid = vd ? validator[vd](value) : true
+        console.log('form vars', fn, el, valid);
         if (!valid) {
           // this.state.fields.__refs[fn].focus()
           // fields.__refs[fn].focus()

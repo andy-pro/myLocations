@@ -23,6 +23,9 @@ function createComponent(type='div', passThroughProps=[]) {
           case 'onChangeText':
             output.onChange = ruleProps.onChangeText;
             break;
+          case 'selectedValue':
+            output.value = ruleProps.selectedValue;
+            break;
           case 'onValueChange':
             output.onChange = ruleProps.onValueChange;
             break;

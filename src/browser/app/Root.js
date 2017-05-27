@@ -7,17 +7,16 @@ import { Provider as Fela } from 'react-fela';
 
 import configureFela from '../../common/__config/fela';
 import configureStore from '../../common/__config/store';
-import * as backup from '../backup'
 import messages from '../messages'
 import config from '../../common/config'
 
 import App from './App';
 
-var start_time = performance.now()
-process.__elapsed = (msg) => {
-  console.info(msg, performance.now() - start_time)
-  start_time = performance.now()
-}
+// var start_time = performance.now()
+// process.__elapsed = (msg) => {
+//   console.info(msg, performance.now() - start_time)
+//   start_time = performance.now()
+// }
 
 const initialState = window.__INITIAL_STATE__; // eslint-disable-line no-underscore-dangle
 initialState.app.messages = messages
@@ -32,26 +31,14 @@ initialState.app.messages = messages
 // config.userId = initialState.config.userId
 // initialState.config = config
 
-
 const store = configureStore({
   initialState,
   platformDeps: {
     config,
     storageEngine: localforage,
-    backup,
     messages,
   },
 });
-
-if (config.storage === 'mongodb') {
-  require('../../common/__api/mongodb')
-    .init({
-      // http - ws; https - wss
-      url: location.origin.replace(/^http/, 'ws'),
-      // dispatch: store.dispatch
-      store,
-    })
-}
 
 // This should be part of Fela.
 // TODO: https://github.com/rofrischmann/fela/issues/125
@@ -71,7 +58,7 @@ const getFelaMountNode = () => {
 const Root = () => (
   <Redux store={store}>
     <Fela mountNode={getFelaMountNode()} renderer={configureFela()}>
-      {/*<BrowserRouter basename="/finan-go">*/}
+      {/*<BrowserRouter basename="/myLocationsDemo">*/}
       <BrowserRouter>
         <App />
       </BrowserRouter>
