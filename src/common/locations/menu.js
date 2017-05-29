@@ -16,7 +16,7 @@ class LocationMenu extends Component {
         newEntry = entry !== this.props.entry && editMode,
         newMode = mode !== this.props.mode && editMode
     if (newEntry || newMode) {
-      console.log('entry', entry);
+      // console.log('entry', entry);
       this.setFields(entry)
       setTimeout(this.setFocus)
       return false
@@ -73,6 +73,7 @@ class LocationMenu extends Component {
     let { fields, mode, entry, categories } = this.props
     // console.log('category menu render', fields.category);
     // ios-paper-plane-outline
+    categories = [{name: '-= No category =-', id: 0}].concat(categories)
     return (
 
       <Form
@@ -83,6 +84,7 @@ class LocationMenu extends Component {
         <View style={mainCSS.row}>
           <TextInput
             placeholder={mode === 'add' ? 'New entry' : 'Edit entry'}
+            style={mainCSS.input}
             { ...fields.name }
             { ...this.propSet0 }
           />
@@ -90,6 +92,7 @@ class LocationMenu extends Component {
         <View style={mainCSS.row}>
           <TextInput
             placeholder={'Address'}
+            style={mainCSS.input}
             { ...fields.address }
             { ...this.propSet0 }
           />
@@ -107,20 +110,10 @@ class LocationMenu extends Component {
         <View style={mainCSS.row}>
           <TextInput
             placeholder={'Coordinates'}
+            style={[mainCSS.input, {marginRight: 10}]}
             { ...fields.coords }
             { ...this.propSet0 }
           />
-        </View>
-
-        <View style={mainCSS.pullRightRow}>
-          <Icon.Button
-            name={'ios-globe'}
-            backgroundColor={colors.success}
-            style={iconBtnCSS}
-            buttonStyle={{marginRight: 10}}
-          >
-            Get Coords (not yet implemented)
-          </Icon.Button>
           <Icon.Button
             name={mode === 'add' ? 'ios-add-circle-outline' : 'ios-create-outline'}
             backgroundColor={colors.success}
@@ -134,10 +127,22 @@ class LocationMenu extends Component {
     )
   }
 
+  /*
+          <Icon.Button
+            name={'ios-globe'}
+            backgroundColor={colors.success}
+            onPress={(e) => { e.stopPropagation() }}
+            style={iconBtnCSS}
+            buttonStyle={{marginRight: 10}}
+          >
+            Get Coords (not yet implemented)
+          </Icon.Button>
+  
+  */
+
   propSet0 = {
     // onBlur: this.onBlur,
     // required: true,
-    style: mainCSS.input,
     keyboardType: 'default',
     returnKeyType: 'done',
     autoCapitalize: 'sentences',

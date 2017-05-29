@@ -1,7 +1,7 @@
 import * as CONST from './_const'
 
 import categoriesCSS from './categories'
-import suggestionsCSS from './suggestions'
+// import suggestionsCSS from './suggestions'
 import locationsCSS from './locations'
 import headerCSS from './header'
 
@@ -29,7 +29,13 @@ const mainCSS = {
     left: 0,
     right: 0,
   },
-
+  centerContainer: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   fixContainer: {
     marginHorizontal: 'auto',
     maxWidth: 450,
@@ -183,7 +189,7 @@ export {
   colors,
   mainCSS,
   categoriesCSS,
-  suggestionsCSS,
+  // suggestionsCSS,
   locationsCSS,
   buttonCSS,
   checkboxCSS,

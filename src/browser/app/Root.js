@@ -58,8 +58,8 @@ const getFelaMountNode = () => {
 const Root = () => (
   <Redux store={store}>
     <Fela mountNode={getFelaMountNode()} renderer={configureFela()}>
-      {/*<BrowserRouter basename="/myLocationsDemo">*/}
-      <BrowserRouter>
+      <BrowserRouter basename="/myLocationsDemo">
+      {/*<BrowserRouter>*/}
         <App />
       </BrowserRouter>
     </Fela>

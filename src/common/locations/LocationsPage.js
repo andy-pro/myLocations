@@ -6,6 +6,7 @@ import { TouchableHighlight, View, Text, ListView } from '../__components';
 import { setActiveEntry, resetActiveEntry } from '../app/actions'
 import LocationMenu from './menu'
 import { getNameById } from '../__lib/utils'
+import toSections from './scan'
 import { colors, mainCSS, locationsCSS as styles } from '../__themes'
 
 class LocationsPage extends Component {
@@ -16,21 +17,23 @@ class LocationsPage extends Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
       sectionHeaderHasChanged : (s1, s2) => s1 !== s2,
       getSectionHeaderData: (dataBlob, sectionId) => dataBlob[sectionId],
-      getRowData: (dataBlob, sectionId, rowId) => dataBlob[rowId]
+      getRowData: (dataBlob, sectionId, rowId) => dataBlob[sectionId].rows[rowId]
     });
+    let { activeEntry, locations } = props,
+        cid = activeEntry && activeEntry.pattern === '/categories' && activeEntry.entry.id
     this.state = {
       location: {},
       mode: '',
-      ds: this.scanAndClone(props.locations),
+      cid,
     }
+    this.state.ds = this.scanAndClone(props.categories, props.locations)
   }
 
   componentWillMount() {
     this.props.resetActiveEntry()    
   }
 
-  componentWillReceiveProps({ cmdToolbar, locations }) {
-    // console.log('app', app);
+  componentWillReceiveProps({ cmdToolbar, categories, locations }) {
     if (cmdToolbar !== this.props.cmdToolbar) {
       if (cmdToolbar) {       
         let { name } = cmdToolbar
@@ -38,21 +41,27 @@ class LocationsPage extends Component {
           this.setState({ mode: name })        
         }
       } else {
-          this.setState({ 
-            mode: '',
-            // category: {},
-          })
+          this.setState({ mode: '' })
       }
     }
-    if (locations !== this.props.locations) {      
+    if (locations !== this.props.locations || categories !== this.props.categories) {      
       this.setState({
-        ds: this.scanAndClone(locations)
+        ds: this.scanAndClone(categories, locations)
       })
     }
   }
 
-  scanAndClone = (locations) => {
-    return this.ds.cloneWithRows(locations)
+  scanAndClone = (categories, locations) => {
+    let { cid } = this.state
+    if (cid) {
+      return this.ds.cloneWithRows(
+        locations.filter(item => item.category == cid)
+      )
+    } else {
+      let data = toSections(categories, locations),
+          { dataBlob, sectionIds, rowIds } = data
+      return this.ds.cloneWithRowsAndSections(dataBlob, sectionIds, rowIds)
+    }
   }
 
   onLocationPress = (e, location) => {
@@ -66,10 +75,21 @@ class LocationsPage extends Component {
   }
 
   render() {
-    let { mode, location } = this.state,
+    let { mode, location, cid } = this.state,
         { categories, locations } = this.props
     // console.log('%cLocations render', 'color:#048;font-weight:bold', this.props);
-    // console.log('locations page render', location);
+    // console.log('locations page render', location, cid, categories, locations);
+    
+    const renderSection = (item) => {
+      // console.log('render section item', item);
+      return (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            {item.name}
+          </Text>
+        </View>
+      )
+    }
     
     const renderRow = (item) => {
       // console.log('render row item', item);
@@ -94,11 +114,13 @@ class LocationsPage extends Component {
                   {item.address}
                 </Text>
               </View>
-              <View>
-                <Text style={styles.badge}>
-                  {getNameById(categories, item.category)}
-                </Text>
-              </View>
+              {cid &&
+                <View>
+                  <Text style={styles.badge}>
+                    {getNameById(categories, item.category)}
+                  </Text>
+                </View>
+              }
 
             </View>
 
@@ -137,8 +159,9 @@ class LocationsPage extends Component {
           <ListView
             style={styles.root}
             dataSource={this.state.ds}
+            renderSectionHeader={renderSection}
             renderRow={renderRow}
-            enableEmptySections
+            enableEmptySections={false}
             initialListSize={Infinity}
           />
         </View>
@@ -150,6 +173,7 @@ class LocationsPage extends Component {
 }
 export default connect(
   ({app, categories, locations}) => ({
+    activeEntry: app.activeEntry,
     cmdToolbar: app.cmdToolbar,
     categories,
     locations,

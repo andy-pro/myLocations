@@ -24,16 +24,20 @@ const locations = {
     // color: '#555',
     fontWeight: '600'
   },
-  groupTitle: {
+  sectionTitle: {
     color: CONST._main_,
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 15,
   },
-  group: {
-    backgroundColor: '#f3f3f3',
+  section: {
+    // backgroundColor: '#ffa',
+    backgroundColor: '#e0f0d8',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    padding: 5,
+    // marginVertical: 5
   },
   groupMaster: {
-    backgroundColor: '#e0f0d8',
     paddingVertical: 5,
   },
   groupInfo: {

@@ -47,7 +47,7 @@ class ListView extends React.Component {
   }
 
   render() {
-    const {style, dataSource, renderSectionHeader, renderRow} = this.props
+    const {style, dataSource, renderSectionHeader, renderRow, enableEmptySections} = this.props
 
     let {
       _dataBlob,
@@ -62,19 +62,22 @@ class ListView extends React.Component {
         {sectionIdentities.map((sid, index) => {
           let sectionData = _getSectionHeaderData(_dataBlob, sid)
           let rows = rowIdentities[index]
-          return (
-            <div key={sid}>
-              {renderSectionHeader(sectionData, sid)}
-              {rows.map(rid => {
-                let rowData = _getRowData(_dataBlob, sid, rid)
-                return (
-                  <div key={rid}>
-                    {renderRow(rowData, sid, rid)}
-                  </div>
-                )
-              })}
-            </div>
-          )
+          return (enableEmptySections || rows.length) ?
+            (
+              <div key={sid}>
+                {renderSectionHeader(sectionData, sid)}
+                {rows.map(rid => {
+                  let rowData = _getRowData(_dataBlob, sid, rid)
+                  return (
+                    <div key={rid}>
+                      {renderRow(rowData, sid, rid)}
+                    </div>
+                  )
+                })}
+              </div>
+            )
+            :
+            null
         })}
       </View>
     :

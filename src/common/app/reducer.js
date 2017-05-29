@@ -64,6 +64,8 @@ const reducer = (state=initialState, action) => {
 
     case 'categories/UPDATED':
     case 'notify/categories/UPDATED':
+    case 'locations/UPDATED':
+    case 'notify/locations/UPDATED':
       if (action.cmd === 'remove') {
         state = { ...state, activeEntry: null }
         if (state.cmdToolbar && state.cmdToolbar.name === 'edit') state.cmdToolbar = null

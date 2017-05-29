@@ -82,8 +82,8 @@ class App extends Component {
               ...favicon.link,
             ]}
             script={[
-              //{ type: "text/javascript", src: "https://maps.googleapis.com/maps/api/js?key=AIzaSyAZaRY770THMIy_Oa03SUiluEUxh4f3skw&extension=.js" },
-              { type: "text/javascript", src: "https://maps.googleapis.com/maps/api/js" },
+              { type: "text/javascript", src: "https://maps.googleapis.com/maps/api/js?key=AIzaSyAZaRY770THMIy_Oa03SUiluEUxh4f3skw&extension=.js" },
+              //{ type: "text/javascript", src: "https://maps.googleapis.com/maps/api/js" },
             ]}
           />
           <Page pattern="/" exactly component={HomePage} />

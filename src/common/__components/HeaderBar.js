@@ -11,7 +11,7 @@ const icons = {
   remove: { name: 'remove', title: 'Remove', icon: 'ios-remove-circle-outline', dis: true, confirm: true },
   edit:   { name: 'edit', title: 'Edit', icon: 'ios-create-outline', dis: true },
   view:   { name: 'view', title: 'View', icon: 'ios-eye-outline', dis: true },
-  map:    { name: 'map', title: 'Map view', icon: 'ios-globe', dis: true, to: '/map' },
+  map:    { name: 'map', title: 'Map view', icon: 'ios-globe', dis: true, act: 'next' },
   sort:   { name: 'sort', title: 'Sort', icon: 'md-shuffle' },
 }
 
@@ -22,10 +22,16 @@ const HeaderBar = ({ title, pattern, iconStyles, iconColors, style, activeEntry,
       _locs = pattern ==='/locations',
       entryName = activeEntry ? activeEntry.entry.name : ''
 
+  const actions = {
+    next: () => {
+      if (_cats) return router.transitionTo('./locations')
+      if (_locs) return router.transitionTo('./map')
+    },
+  }
+
   const __cmd = icon => {
-    if (icon.to) {
-      return router.transitionTo(icon.to)
-    }
+    if (icon.to) return router.transitionTo(icon.to)
+    if (icon.act) return actions[icon.act]()
     let cb = () => cmdToolbar({ name: icon.name, pattern, activeEntry })
     if (icon.confirm) {
       // console.log('activeEntry', activeEntry);
@@ -61,10 +67,11 @@ const HeaderBar = ({ title, pattern, iconStyles, iconColors, style, activeEntry,
       {(_cats || _locs) &&
         <View style={mainCSS.between}>
           <View style={style.toolbar}>
-            {_locs && <Icon.Button { ...iconSet('map') } /> }
-            <Text style={style.subtext}>
-              {entryName}
-            </Text>
+            {entryName && 
+              <Icon.Button { ...iconSet('map') }>
+                {entryName}
+              </Icon.Button>
+            }
           </View>
           <View style={style.toolbar}>
             <Icon.Button { ...iconSet('add') } />

@@ -65,7 +65,7 @@ const makeConfig = (options) => {
           loader: 'url-loader',
           test: /\.(gif|jpg|png|svg)(\?.*)?$/,
           options: {
-            limit: 10000,
+            limit: 25000,
           },
         }, {
           loader: 'url-loader',

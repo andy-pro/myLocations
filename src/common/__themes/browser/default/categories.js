@@ -28,9 +28,9 @@ const categories = {
     flexDirection: 'row',
   },
   item: {
-    fontSize: 14,
-    paddingVertical: 6,
-    paddingHorizontal: 6,
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     marginBottom: -1,
     // marginVertical: 2,
     // display: 'inline-block',

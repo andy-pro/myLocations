@@ -1,6 +1,6 @@
 // @flow weak
 import { createEpicMiddleware } from 'redux-observable';
-// import createLoggerMiddleware from 'redux-logger';
+import createLoggerMiddleware from 'redux-logger';
 
 import configureDeps from './deps';
 import configureEpics from './epics';
@@ -25,6 +25,7 @@ const configureMiddleware = (initialState, platformDeps, platformMiddleware) => 
   ];
 
 /*
+
   const enableLogger = process.env.NODE_ENV !== 'production' && process.env.IS_BROWSER
   // const enableLogger = false
 

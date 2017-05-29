@@ -9,7 +9,7 @@ export const Text = create(
 
 export const View = create(
   'div',
-  ['data-path', 'onKeyDown', 'onPress']
+  ['data-path', 'onKeyDown', 'onPress', '$ref']
 )
 
 export const AnchorLink = create(

@@ -61,12 +61,14 @@ export const findDuplicate = (list, name) => {
   ) : false;
 }
 
-export const getNameById = (list, id) => 
-  list.find(item => item.id === id).name
+export const getNameById = (list, id) => {
+  let c = list.find(item => item.id === id)
+  return c ? c.name : 'No category'
+}
 
 export const cmdUpdateLocal = (list, { cmd, payload }) => {
   let { data, id } = payload
-  console.log('utils', cmd, payload);
+  // console.log('utils', cmd, payload);
   switch (cmd) {
     case 'add':
       return pushItem(list, data)

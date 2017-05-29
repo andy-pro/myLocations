@@ -5,7 +5,9 @@ import { View, Text, HeaderBar, Title } from '../../common/__components'
 import { colors, mainCSS, headerCSS } from '../../common/__themes'
 
 const iconStyles = {
-  margin: 5
+  // marginHorizontal: 10
+  marginLeft: 5,
+  marginRight: 5,
 }
 
 let iconColors = {
