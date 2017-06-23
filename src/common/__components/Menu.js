@@ -1,64 +1,40 @@
-// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getTransactions } from '../transactions/actions';
-import { ScrollView, View, MenuLink as Link } from './';
-import { mainCSS } from '../__themes'
+import { appShowMenu } from '../app/actions';
+import { View, ScrollView, Link } from '../components';
+import { colors, mainCSS } from '../styles';
+import os from '../os';
 
-const Menu = ({ messages, user, date, getTransactions, delHandler }, { history }) => {
+const Divider = () => <View style={mainCSS.divider} />;
+
+const Menu = ({ appShowMenu }) => {
+  const hide = () => appShowMenu(false);
 
   const MenuLink = ({ ...props }) => {
     if (!props.message) {
-      let linkTitle = 'links.' + (props.to.slice(1) || 'home')
-      props.message = messages[linkTitle]
-      // props.message = linkTitle
+      let t = `links.${props.to.slice(1) || 'menu.home'}.title`;
+      props.message = os.messages[t];
     }
-    return <Link {...props} />
-  }
-
-  const refresh = () => {
-    let p = history.location.pathname
-    if (p === '/' || p === '/single' || p ==='/delete') {
-      getTransactions({ date })
-    }
-  }
+    props.onPress = hide;
+    props.underlayColor = colors.menuTouch;
+    props.linkStyle = mainCSS.m_link;
+    return <Link {...props} />;
+  };
 
   return (
-    <ScrollView
-      automaticallyAdjustContentInsets={false}
-      style={mainCSS.menu}
-    >
+    <ScrollView automaticallyAdjustContentInsets={false} style={mainCSS.menu}>
       <MenuLink exactly to="/" />
-      <MenuLink to="/single" />
-      <MenuLink to="/group" />
-      <MenuLink to="/income" />
-      <MenuLink to="/refresh" action={refresh} />
-      <MenuLink to="/delete" action={delHandler} />
-      <MenuLink to="/categories" />
-      <MenuLink to="/backup" />
-      <MenuLink to="/settings" />
-      <View style={mainCSS.menuFooter}>
-        {user &&
-          <MenuLink to="/me" message={user.displayName} />
-        }
-      </View>
+      <MenuLink to="/iconlist/fa" />
+      <MenuLink to="/iconlist/go" />
+      <MenuLink to="/iconlist/io" />
+      <MenuLink to="/iconlist/md" />
+      <MenuLink to="/iconlist/ti" />
+      <MenuLink to="/iconlist/all" />
+      <Divider />
+      <MenuLink to="/about" />
     </ScrollView>
   );
-
-}
-
-Menu.contextTypes = {
-  history: React.PropTypes.object,
 };
 
-export default connect(
-  ({ app , user }) => ({
-    currentLocale: app.currentLocale,
-    messages: app.messages,
-    date: app.date,
-    delHandler: app.delHandler,
-    user,
-  }),
-  { getTransactions }
-)(Menu);
+export default connect(null, { appShowMenu })(Menu);

@@ -1,10 +1,8 @@
 import React from 'react';
 import { AppRegistry } from 'react-native';
 
-import Root from './app/Root';
+import Root from './Root';
 
-const myLocations = () => (
-  <Root />
-);
+const IconViewer = () => <Root />;
 
-AppRegistry.registerComponent('myLocations', () => myLocations);
+AppRegistry.registerComponent('IconViewer', () => IconViewer);

@@ -1,17 +1,13 @@
-// @flow
 import React from 'react';
-import { View, Text, Image } from '../__components';
-import { mainCSS } from '../__themes'
+import { View, Image } from '../components';
+import { mainCSS } from '../styles';
 
-const earth = require('./earth.jpg')
+const earth = require('./earth.jpg');
 
 const HomePage = () => {
   return (
     <View style={mainCSS.centerContainer}>
-      <Image 
-        source={earth}
-        width={300}
-      />
+      <Image source={earth} width={300} />
     </View>
   );
 };

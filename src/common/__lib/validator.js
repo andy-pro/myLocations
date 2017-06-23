@@ -1,14 +1,20 @@
-const isDecimal = value => /^-?\d*\.?\d+$/.test(value)
+const isDecimal = value => /^-?\d*\.?\d+$/.test('' + value);
 
 export default {
-
   required: value => Boolean(value),
 
   isDecimal,
 
-  coordinates: value => {
-    value = value.split(',')
-    return (value.length === 2) && isDecimal(value[0].trim()) && isDecimal(value[1].trim())
-  }
-
-}
+  isCoords: orig => {
+    if (!orig) return false;
+    let v = Array.isArray(orig) ? orig : orig.split(','),
+      x = ('' + v[0]).trim(),
+      y = ('' + v[1]).trim(),
+      r = v.length === 2 && isDecimal(x) && isDecimal(y);
+    if (r) {
+      r = [x, y];
+      r.orig = orig;
+    }
+    return r;
+  },
+};

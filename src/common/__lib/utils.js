@@ -1,114 +1,164 @@
-import slugify from 'slugify'
-
-export const firstToUpper = str =>
-  str.substr( 0, 1 ).toUpperCase() + str.substr( 1 )
-
-export const convToArray = obj => Array.isArray(obj) ? obj : [obj]
-
-export const compose = (...fns) => (data) => {
-/*  Performs right-to-left function composition.
-    All functions must be unary. */
-  for (let i = 0, len = fns.length; i < len; i++) {
-    data = fns[len - i - 1](data)
-  }
-  return data
-}
-
-export const pick = (obj, props) =>
-  props.reduce((o, k) => {o[k] = obj[k]; return o}, {})
-
-export const omit = (obj, props) =>
-  Object.keys(obj).reduce((o, k) => {if (!props.includes(k)) o[k] = obj[k]; return o}, {})
-
-export const fmtCost = cost =>
-  Number(cost || 0).toFixed(2).replace(/[.,]00$/, "")
-
-export const getValue = v =>
-  typeof v === 'object' ? v.target.value : v
-
-export const testColor = v =>
-  /^[0-9,a-f]{3}$/.test(v) || /^[0-9,a-f]{6}$/.test(v)
-
-export const splitOnce = (str, dt, last=false) => {
-  let pos = last ? str.lastIndexOf(dt) : str.indexOf(dt);
-  return (pos >=0 ) ? [str.substr(0, pos), str.substr(pos+dt.length)] : [str];
-}
-
-const specialCharsRegex = /[\/|\&\?<>]/g
-
-const removeSpecial = s => s.trim().replace(specialCharsRegex, '')
-
-const getSlug = s => slugify(removeSpecial(s))
-
-export { removeSpecial, getSlug }
-
-export const splitCategory = category =>
-  category
-    .split('/')
-    .map(c => removeSpecial(c))
-
-export const slugifyCategory = (category) =>
-  category
-    .split('/')
-    .map(c => getSlug(c))
-    .filter(c => Boolean(c))
-    .join('/')
-
-export const findDuplicate = (list, name) => {
-  name = name.toLowerCase()
-  return list ? list.find(item => 
-    item.name.toLowerCase() === name
-  ) : false;
-}
-
-export const getNameById = (list, id) => {
-  let c = list.find(item => item.id === id)
-  return c ? c.name : 'No category'
-}
-
-export const cmdUpdateLocal = (list, { cmd, payload }) => {
-  let { data, id } = payload
-  // console.log('utils', cmd, payload);
-  switch (cmd) {
-    case 'add':
-      return pushItem(list, data)
-
-    case 'edit':
-      return updateItemById(list, id , data)
-
-    case 'remove':
-      return deleteItemById(list, payload)
-  
-    default:
-      return list
-  }
-
-}
+import slugify from 'slugify';
 
 /* =============  Immutability helpers  ================== */
 
-export const pushItem = (list, item) => list.concat(item)
+export const pushItem = (list, item) => list.concat(item);
 
-export const unshiftItem = (list, item) => [item].concat(list)
+export const unshiftItem = (list, item) => [item].concat(list);
 
 export const updateItemById = (list, id, set) =>
-  list.map(item =>
-    item.id === id ? Object.assign(item, set) : item
-  )
+  list.map(item => (item.id === id ? Object.assign(item, set) : item));
 
-export const deleteItemById = (list, id) =>
-  list.filter(item => item.id !== id)
+export const deleteItemById = (list, id) => list.filter(item => item.id !== id);
 
-export const deleteItemsByIds = (list, ids) => {
-  if (!ids instanceof Array) ids = [ids]
-  ids = ids.slice(0)
-  return list.filter(item => {
-    for (let i = 0, len = ids.length; i < len; i++) {
-      if (item.id === ids[i]) {
-        ids.splice(i, 1)
-        return false
+export const deleteItemsByArray = (list, ids, filter) => {
+  if (!(ids instanceof Array)) ids = [ids];
+  ids = ids.slice(0);
+  return list.filter((item, j) => {
+    for (let k = 0, len = ids.length; k < len; k++) {
+      // if (item.id === ids[i]) {
+      if (filter(item, ids, k, j)) {
+        ids.splice(k, 1);
+        return false;
       }
     }
-    return true
-  })
-}
+    return true;
+  });
+};
+
+export const deleteItemsByIds = (list, ids) =>
+  deleteItemsByArray(list, ids, (e, a, k) => e.id === a[k]);
+
+export const deleteItemsByIndexes = (list, ids) =>
+  deleteItemsByArray(list, ids, (e, a, k, j) => j === a[k]);
+
+/* =============  end of Immutability helpers  ================== */
+
+export const firstToUpper = str => str.substr(0, 1).toUpperCase() + str.substr(1);
+
+export const convToArray = obj => (Array.isArray(obj) ? obj : [obj]);
+
+export const compose = (...fns) => data => {
+  /*  Performs right-to-left function composition.
+    All functions must be unary. */
+  for (let i = 0, len = fns.length; i < len; i++) {
+    data = fns[len - i - 1](data);
+  }
+  return data;
+};
+
+export const pick = (obj, props) =>
+  props.reduce((o, k) => {
+    o[k] = obj[k];
+    return o;
+  }, {});
+
+export const omit = (obj, props) =>
+  Object.keys(obj).reduce((o, k) => {
+    if (!props.includes(k)) o[k] = obj[k];
+    return o;
+  }, {});
+
+export const fmtCost = cost => Number(cost || 0).toFixed(2).replace(/[.,]00$/, '');
+
+export const getValue = v => (typeof v === 'object' ? v.target.value : v);
+
+export const testColor = v => /^[0-9,a-f]{3}$/.test(v) || /^[0-9,a-f]{6}$/.test(v);
+
+export const splitOnce = (str, dt, last = false) => {
+  let pos = last ? str.lastIndexOf(dt) : str.indexOf(dt);
+  return pos >= 0 ? [str.substr(0, pos), str.substr(pos + dt.length)] : [str];
+};
+
+// eslint-disable-next-line
+const specialCharsRegex = /[\/|\&\?<>]/g;
+
+const removeSpecial = s => s.trim().replace(specialCharsRegex, '');
+
+const getSlug = s => slugify(removeSpecial(s));
+
+export { removeSpecial, getSlug };
+
+export const splitCategory = category => category.split('/').map(c => removeSpecial(c));
+
+export const slugifyCategory = category =>
+  category.split('/').map(c => getSlug(c)).filter(c => Boolean(c)).join('/');
+
+export const cmdUpdateLocal = (list, { cmd, payload }) => {
+  // console.log('utils', cmd, payload);
+  switch (cmd) {
+    case 'add':
+      return pushItem(list, payload);
+
+    case 'edit':
+      let { __id } = payload;
+      delete payload.__id;
+      return updateItemById(list, __id, payload);
+
+    case 'remove':
+      // return deleteItemById(list, payload);
+      return deleteItemsByIds(list, payload);
+
+    case 'purge':
+      return deleteItemsByIndexes(list, payload);
+
+    default:
+      return list;
+  }
+};
+
+/* =============  check data helpers  ================== */
+
+export const checkData = (list, model) => {
+  /* prettier-ignore */
+  let fields = convToArray(model).filter(item => item.hasOwnProperty('vd')).map(item => item.fn).concat('id'),
+    damage = item => fields.find(fn => !item.hasOwnProperty(fn)),
+    data = [],
+    ids = {},
+    error,
+    print = (i, e) => {
+      e = `[${i}]: ${e}`;
+      error = error || { indexes: [], info: [] };
+      error.indexes.push(i);
+      error.info.push(e);
+      console.info(`Data damaged ${e}!`);
+    };
+  // console.log('fields', list, fields);
+  /* prettier-ignore */
+  list.forEach((item, i) => {
+    if (!item || damage(item)) {
+      print(i, `fields ${JSON.stringify(fields)} expected, but ${JSON.stringify(item)} found`);
+    } else {
+      var { id } = item;
+      if (ids[id]) {
+        print(i, `duplicate id - ${id}`);
+      } else {
+        ids[id] = true;
+        data.push(item);
+      }
+    }
+  });
+  return { data, error, list };
+};
+
+/* =============  sort helpers  ================== */
+const sortByAlpha = (a, b) => {
+  if (a.name > b.name) return 1;
+  if (a.name < b.name) return -1;
+  return 0;
+};
+
+export const sortListByMode = (list, sortMode) => {
+  // sortModes = ['sort-alpha', 'sort-asc', 'sort-desc'];
+  /* eslint-disable */
+  switch (sortMode) {
+    case 'sort-alpha':
+      return list.slice(0).sort(sortByAlpha);
+    case 'sort-desc':
+      // descendant, newest at the top
+      return list.slice(0).reverse();
+    // default: 'sort-asc', ascendant,  oldest at the top
+  }
+  /* eslint-enable */
+  return list;
+};

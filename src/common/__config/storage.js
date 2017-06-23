@@ -1,11 +1,11 @@
-// @flow weak
 import { createTransform } from 'redux-persist';
 import { pick } from '../__lib/utils';
 
+// prettier-ignore
 const paths = [
-  ['app', ['currentLocale']],
-  ['categories'],
-  ['locations'],
+  ['app', ['currentLocale', 'sortMode']], 
+  ['categories'], 
+  ['locations']
 ];
 
 const transforms = [];

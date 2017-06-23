@@ -1,20 +1,15 @@
-// @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Root from './app/Root';
+import Root from './Root';
 
-const appElement = document.getElementById('app');
+let el = document.getElementById('app');
 
-ReactDOM.render(<Root />, appElement);
+ReactDOM.render(<Root />, el);
 
-// Hot reload render.
-// gist.github.com/gaearon/06bd9e2223556cb0d841#file-native-js
-/*
-*/
 if (module.hot && typeof module.hot.accept === 'function') {
-  module.hot.accept('./app/Root', () => {
-    const NextRoot = require('./app/Root').default;
-    ReactDOM.render(<NextRoot />, appElement);
+  module.hot.accept('./Root', () => {
+    const NextRoot = require('./Root').default;
+    ReactDOM.render(<NextRoot />, el);
   });
 }

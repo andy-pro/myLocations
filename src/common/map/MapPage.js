@@ -1,45 +1,67 @@
-// @flow
 import React from 'react';
 import { connect } from 'react-redux';
+import { View } from '../components';
+import { findItemById } from '../__lib/find';
+import validator from '../__lib/validator';
+import { mainCSS } from '../styles';
 
-import { View } from '../__components';
-
-function ShowPositon(el, [x, y]) {
-    // console.log('el', el, document);
-    if (!window && !window.google) return
-    var google = window.google
-    var mapOptions = {
-        center: new google.maps.LatLng(x, y),
-        zoom: 9,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var map = new google.maps.Map(el, mapOptions);
-    return (false);
+function ShowPositon(el, x, y, zoom) {
+  // console.log('el', el, Boolean(window.google));
+  if (!window || !window.google) return;
+  var google = window.google;
+  var mapOptions = {
+    center: new google.maps.LatLng(x, y),
+    zoom: Math.floor(zoom),
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+  };
+  return new google.maps.Map(el, mapOptions);
 }
 
-
-
 class MapPage extends React.Component {
+  defaultCoords = [50.6092, 33.4515];
+  defaultZoom = 9;
 
   componentDidMount() {
-    let { activeEntry } = this.props,
-        coords = activeEntry ? activeEntry.entry.coords : [50.6092, 33.4515]
-    ShowPositon(this.map, coords)
+    this.getCoordsAndShow(this.props);
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.getCoordsAndShow(nextProps);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  }
+
+  getCoordsAndShow = ({ match, locations }) => {
+    let { location } = match.params,
+      coords,
+      zoom;
+    if (location) {
+      // for url as '/map/@50.605,33.425,13z'
+      if (location.startsWith('@')) {
+        location = location.slice(1).split(',');
+        coords = location.slice(0, 2);
+        zoom = /^\d+\.?\d*z$/.test(location[2]) ? location[2].slice(0, -1) : '';
+      } else {
+        // for url as '/map/Perekopovka'
+        location = findItemById(locations, location);
+        if (location) {
+          coords = location.coords.split(',');
+          zoom = location.zoom;
+        }
+      }
+    }
+    coords = validator.isCoords(coords) || this.defaultCoords;
+    zoom = (zoom && zoom.trim()) || this.defaultZoom;
+    ShowPositon(this.map, coords[0], coords[1], zoom);
+  };
 
   render() {
-    return (
-      <View 
-        style={{width: '100%', height: '100%'}} 
-        $ref={c => this.map = c}
-      />
-    );
+    return <View style={mainCSS.fullWindow} $ref={c => (this.map = c)} />;
   }
+}
 
-};
-
-export default connect(
-  ({ app }) => ({
-    activeEntry: app.activeEntry,
-  })
-)(MapPage);
+export default connect(({ app, locations }) => ({
+  locations,
+}))(MapPage);

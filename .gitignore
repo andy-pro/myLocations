@@ -34,11 +34,11 @@ local.properties
 #
 node_modules/
 npm-debug.log
+yarn-error.log
 
 # BUCK
 buck-out/
 \.buckd/
-android/app/libs
 *.keystore
 
 # fastlane
@@ -52,13 +52,5 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 
-# Este
-.firebaserc
-bundle-stats.json
-firebase-debug.log
-firebase/rules.json
-src/common/config.json
-src/native/initialState.js
-webpack-assets.json
-
-.__projects__/
+.projects
+.vscode

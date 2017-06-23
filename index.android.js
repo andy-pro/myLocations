@@ -1,1 +1,1 @@
-import native from './src/native';
+require('./src/native');
