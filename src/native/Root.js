@@ -1,10 +1,12 @@
 import React from 'react';
 import { NativeRouter } from 'react-router-native';
 import { Provider as Redux } from 'react-redux';
-import { Platform } from 'react-native';
+import { AppRegistry, AsyncStorage, Platform } from 'react-native';
 import LocalizedStrings from 'react-native-localization';
 
+import setupHardwareBackPress from './components/setupHardwareBackPress';
 import configureStore from '../common/__config/store';
+import config from '../common/config';
 import initialState from '../common/initialState';
 import App from '../common/app/App';
 import os from '../common/os';
@@ -12,6 +14,7 @@ import os from '../common/os';
 const messages = new LocalizedStrings(require('../common/__messages'));
 
 /* platform dependencies */
+setupHardwareBackPress(os);
 os.isNative = true;
 os.messages = messages;
 os.platform = Platform.OS;
@@ -31,7 +34,8 @@ initialState.app.currentLocale = getDefaultDeviceLocale();
 const store = configureStore({
   initialState,
   platformDeps: {
-    // config,
+    config,
+    storageEngine: AsyncStorage,
     messages,
   },
 });
@@ -50,4 +54,5 @@ class Root extends React.Component {
   }
 }
 
-export default Root;
+// AppRegistry.registerComponent(config.appName, () => () => <Root />);
+AppRegistry.registerComponent(config.appName, () => Root);

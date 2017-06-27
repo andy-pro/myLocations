@@ -10,6 +10,8 @@ function createComponent(type = 'div', passThroughProps = []) {
   ) {
     if (style instanceof Array) style = Object.assign({}, ...style);
 
+    let setHover = prop => Object.assign({ cursor: 'pointer' }, style[':hover'], prop);
+
     var componentProps = passThroughProps.reduce(function(output, prop) {
       if (typeof prop === 'object') {
         Object.assign(output, prop);
@@ -42,10 +44,10 @@ function createComponent(type = 'div', passThroughProps = []) {
             output.src = ruleProps.source;
             break;
           case 'underlayColor':
-            style[':hover'] = Object.assign({}, style[':hover'], {
-              backgroundColor: ruleProps.underlayColor,
-              cursor: 'pointer',
-            });
+            style[':hover'] = setHover({ backgroundColor: ruleProps.underlayColor });
+            break;
+          case 'activeOpacity':
+            style[':hover'] = setHover({ opacity: ruleProps.activeOpacity });
             break;
           default:
             output[prop] = ruleProps[prop];

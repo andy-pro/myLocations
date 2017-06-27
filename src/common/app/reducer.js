@@ -15,6 +15,7 @@ const initialState = {
   defaultLocale: null,
   locales: null,
   messages: null,
+  layout: {},
 };
 
 const sortModes = ['sort-alpha', 'sort-asc', 'sort-desc'];

@@ -3,43 +3,50 @@ import { opts, colors, iconColors } from '../../common/const';
 
 export { colors, iconColors };
 export { headerCSS } from './header';
-
-const textSize = opts.fontSize * 1.3;
+export { sectionsCSS } from './sections';
+export { roundBtnCSS } from './roundBtn';
 
 export const mainCSS = StyleSheet.create({
-  drawer: {
+  app: {
     flex: 1,
-    backgroundColor: colors.drawer,
   },
-  page: {
+  root: {
     flex: 1,
+    backgroundColor: colors.background,
   },
   main: {
     flex: 1,
     backgroundColor: colors.background,
   },
-
-  limited: {
+  page: {
     flex: 1,
   },
-
-  textContainer: {
-    // flex: 1,
-    padding: opts.gaps,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    // flexFlow: 'row wrap',
-    // alignItems: 'flex-start',
-    fontSize: textSize,
+  limited: {
+    flex: 1,
+    // maxWidth: 450,
+  },
+  full: {
+    flex: 1,
+  },
+  fullWindow: {
+    width: '100%',
+    height: '100%',
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
-  h_link: {
-    marginHorizontal: 20,
-    paddingHorizontal: 15,
-    fontSize: textSize,
-    color: '#559',
-    textDecorationLine: 'underline',
-    // backgroundColor: '#ffa',
+  text: {
+    fontSize: opts.fontSize,
+    color: colors.dark,
+  },
+  subTitle: {
+    fontSize: opts.fontSize,
+    fontWeight: '600',
+    // color: colors.light,
+    // lineHeight: opts.fontSize + 'px',
+    // flexWrap: 'wrap',
   },
 
   divider: {
@@ -47,15 +54,16 @@ export const mainCSS = StyleSheet.create({
     borderBottomWidth: 1,
   },
 
-  form: {
-    paddingTop: 6,
-    paddingBottom: 4,
-    paddingHorizontal: 15,
-    backgroundColor: '#ffd',
-  },
-
   row: {
     flexDirection: 'row',
+    // justifyContent: 'center',
+    // align-items: flex-start | flex-end | center | baseline | stretch (default)
+    // alignItems: 'flex-start',
+    // alignItems: 'center',
+  },
+  centerRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   between: {
@@ -63,15 +71,41 @@ export const mainCSS = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
-
-  input: {
-    flex: 1,
-    fontSize: textSize,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    marginTop: 4,
+  pullRightRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  pullRightCol: {
+    alignItems: 'flex-end',
+  },
+  active: {
+    backgroundColor: colors.active,
   },
 
+  /* form styles */
+  form: {
+    paddingTop: 6,
+    paddingBottom: 4,
+    paddingHorizontal: 15,
+    backgroundColor: colors.active,
+  },
+  formRow: {
+    flexDirection: 'row',
+  },
+  input: {
+    flex: 1,
+    fontSize: opts.fontSize,
+    paddingHorizontal: 8,
+    paddingVertical: 1,
+    // marginTop: 4,
+  },
+  picker: {
+    flex: 1,
+    // flexDirection: 'row',
+    // paddingHorizontal: 8,
+    paddingVertical: 0,
+    // marginTop: 4
+  },
   button: {
     borderWidth: 1,
     borderRadius: 4,
@@ -81,44 +115,28 @@ export const mainCSS = StyleSheet.create({
     paddingVertical: 4,
   },
 
-  picker: {
-    flex: 1,
-    // flexDirection: 'row',
-    // paddingHorizontal: 8,
-    // paddingVertical: 2,
-    // marginTop: 4
+  /* links */
+  h_link: {
+    marginHorizontal: 20,
+    paddingHorizontal: 15,
+    fontSize: opts.fontSize * 1.3,
+    color: '#559',
+    textDecorationLine: 'underline',
+    // backgroundColor: '#ffa',
   },
 
-  menu: {
-    paddingHorizontal: 10,
+  /* footer */
+  footer: {
+    // display: 'flex',
+    backgroundColor: colors.footer,
+    // bottom: 0,
+    // position: 'fixed',
+    // width: '100%',
+    height: opts.footerH,
   },
-  m_link: {
+  f_link: {
     color: colors.light,
-    fontSize: 18,
-    padding: 6,
-  },
-
-  /* section list */
-  section: {
-    backgroundColor: colors.success,
-    borderBottomColor: colors.silver,
-    borderBottomWidth: 1,
-    paddingVertical: 10,
-    paddingHorizontal: opts.gaps,
-    marginHorizontal: 1,
-  },
-  sectionTitle: {
-    fontSize: opts.fontSize * 1.2,
-    fontWeight: '600',
-  },
-  sectionItem: {
-    borderTopColor: colors.silver,
-    borderTopWidth: 1,
-    paddingVertical: 10,
-    paddingHorizontal: opts.gaps,
-    marginHorizontal: 1,
-    // color: colors.dark,
-    // fontSize: opts.fontSize,
+    fontSize: opts.fontSize * 0.8,
   },
 });
 

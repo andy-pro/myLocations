@@ -2,7 +2,8 @@ import { opts, colors, iconColors } from '../../common/const';
 
 export { colors, iconColors };
 export { headerCSS } from './header';
-export { locationsCSS } from './locations';
+export { sectionsCSS } from './sections';
+export { roundBtnCSS } from './roundBtn';
 
 export const mainCSS = {
   root: {
@@ -41,10 +42,8 @@ export const mainCSS = {
     width: '100%',
     height: '100%',
   },
-  centerContainer: {
+  center: {
     display: 'flex',
-    width: '100%',
-    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     // position: 'relative',
@@ -53,6 +52,12 @@ export const mainCSS = {
   text: {
     fontSize: opts.fontSize,
     color: colors.dark,
+  },
+  subTitle: {
+    fontSize: opts.fontSize,
+    fontWeight: '600',
+    lineHeight: opts.fontSize + 'px',
+    // whiteSpace: 'nowrap',
   },
 
   divider: {
@@ -63,8 +68,12 @@ export const mainCSS = {
 
   row: {
     display: 'flex',
+  },
+  centerRow: {
+    display: 'flex',
     // align-items: flex-start | flex-end | center | baseline | stretch (default)
     // alignItems: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   between: {
@@ -84,7 +93,7 @@ export const mainCSS = {
     alignItems: 'flex-end',
   },
   active: {
-    backgroundColor: colors.selected,
+    backgroundColor: colors.active,
   },
 
   /* form styles */
@@ -154,28 +163,6 @@ export const mainCSS = {
     userSelect: 'none',
   },
 
-  /* section list */
-  section: {
-    backgroundColor: colors.success,
-    borderBottomColor: colors.silver,
-    borderBottomWidth: 1,
-    paddingVertical: 10,
-    paddingHorizontal: opts.gaps,
-    marginTop: 10,
-  },
-  sectionTitle: {
-    fontSize: opts.fontSize,
-    fontWeight: '600',
-  },
-  sectionItem: {
-    borderTopColor: colors.silver,
-    borderTopWidth: 1,
-    color: colors.dark,
-    paddingVertical: 4,
-    paddingHorizontal: opts.gaps,
-    userSelect: 'none',
-    // paddingHorizontal: 10,
-  },
   /* footer */
   footer: {
     display: 'flex',

@@ -3,8 +3,7 @@ import Helmet from 'react-helmet';
 
 import FlatList from './FlatList';
 import SectionList from './SectionList';
-import Link from './Link';
-import TouchLink from './TouchLink';
+// import Link from './Link';
 import DropdownMenu from './DropdownMenu';
 
 // import HeaderBar from '../HeaderBar';
@@ -34,7 +33,9 @@ export {
 } from './fela';
 
 export { View, View as Drawer };
-export { Route, withRouter, NavLink } from 'react-router-dom';
+export { Route, Redirect, withRouter, NavLink } from 'react-router-dom';
+
+export { TouchLink, IconLinkPlatform, IconButtonPlatform } from './controls';
 
 const Alert = {
   alert: (hdr, msg, btns) => {
@@ -47,8 +48,7 @@ const Alert = {
 export {
   FlatList,
   SectionList,
-  Link,
-  TouchLink,
+  // Link,
   DropdownMenu,
   Helmet,
   ListView,

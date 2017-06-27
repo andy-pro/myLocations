@@ -37,7 +37,7 @@ export default Form =>
       }
 
       setFocus = () => {
-        if (this.props.mode) this.props.fields.__refs.name.focus();
+        // if (this.props.mode) this.props.fields.__refs.name.focus();
       };
 
       onSubmit = e => {

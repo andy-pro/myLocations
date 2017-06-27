@@ -5,7 +5,7 @@ import Form from './Form';
 import __toSections from './toSections';
 import EditedList from '../__components/EditedList';
 import { View, Text, TouchLink } from '../components';
-import { colors, mainCSS, locationsCSS as styles } from '../styles';
+import { colors, mainCSS, sectionsCSS as styles } from '../styles';
 
 const toSections = ({ locations, ...props }) => {
   let { data, error } = checkData(locations, Form.model.fields);
@@ -27,8 +27,8 @@ export default EditedList({
 
 function renderSectionHeader({ section }) {
   return (
-    <View style={mainCSS.section}>
-      <Text style={mainCSS.sectionTitle}>
+    <View style={styles.header}>
+      <Text style={styles.title}>
         {section.name}
       </Text>
     </View>
@@ -42,17 +42,17 @@ function renderItem({ item }) {
     <TouchLink
       to={`/map/${item.id}`}
       underlayColor={colors.touch}
-      style={[mainCSS.sectionItem, entry && entry.id === item.id && mainCSS.active]}
+      style={[styles.item, entry && entry.id === item.id && mainCSS.active]}
       onLongPress={() => this.onItemLongPress(item)}
     >
       <View style={mainCSS.between}>
         <View>
           <View>
-            <Text style={styles.title}>
+            <Text style={mainCSS.subTitle}>
               {item.name}
             </Text>
           </View>
-          <View>
+          <View style={mainCSS.row}>
             <Text style={styles.badge}>
               {item.address}
             </Text>
@@ -66,7 +66,7 @@ function renderItem({ item }) {
             </Text>
           </View>
           <View>
-            <Text style={styles.meaning}>
+            <Text style={styles.extra}>
               {item.coords}
             </Text>
           </View>

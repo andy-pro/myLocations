@@ -34,9 +34,8 @@ export const Form = ({ children, ...props }) =>
     <Button style={{ display: 'none' }} />
   </BaseForm>;
 
-export const TouchableVirtual = create('div', ['underlayColor', 'onLongPress']);
-
 export const TouchableHighlight = create('div', [
+  'activeOpacity',
   'underlayColor',
   'onPress',
   'onLongPress',

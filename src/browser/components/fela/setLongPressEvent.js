@@ -4,6 +4,7 @@ var pressTimer;
 
 export default (output, { to, onLongPress, onNavigate }) => {
   let { touchEvents } = os;
+  // console.log('touchEvents', touchEvents);
   output.onClick = () => {
     clearTimeout(pressTimer);
     if (pressTimer !== undefined) {

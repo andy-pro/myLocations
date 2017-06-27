@@ -2,7 +2,7 @@ import React from 'react';
 
 import validator from '../__lib/validator';
 import { convToArray } from '../__lib/utils';
-import __config from '../config';
+import os from '../os';
 
 /*
   model:
@@ -37,7 +37,7 @@ const wrapper = forms => WrappedComponent => {
 
     constructor(props) {
       super(props);
-      let { isNative } = __config,
+      let { isNative } = os,
         refName = isNative ? 'ref' : '$ref';
       let fields = {
         __query: '',
@@ -81,7 +81,7 @@ const wrapper = forms => WrappedComponent => {
       let { fields } = this.state,
         { __types } = fields,
         TYPES = this.constructor.TYPES,
-        { isNative } = __config,
+        { isNative } = os,
         common;
       if (cmd === 'change') {
         let { e, fn } = opts,
@@ -159,7 +159,7 @@ const wrapper = forms => WrappedComponent => {
         if (type === 'text') {
           value = value.trim();
           if (pp) value = pp(value); // postProcessing
-        } else if (type === 'file' && __config.isNative) {
+        } else if (type === 'file' && os.isNative) {
           let n = value.trim();
           value = field.fileList.find(item => item.name === n);
           // value = fields[fn].fileList.find(item => item.name === n)

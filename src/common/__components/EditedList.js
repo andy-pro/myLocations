@@ -75,7 +75,7 @@ export default ({
         // console.log('this EDITED LIST render', this.props, mode, sections);
         return (
           <View style={mainCSS.page}>
-            {mode && <Form mode={mode} listName={listName} {...this.props} />}
+            {Boolean(mode) && <Form mode={mode} listName={listName} {...this.props} />}
             <SectionList
               sections={sections}
               renderSectionHeader={renderSectionHeader}

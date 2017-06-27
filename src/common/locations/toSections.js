@@ -11,9 +11,11 @@ export default ({ categories, locations, match, sortMode }) => {
     categories = sortListByMode(categories, sortMode.name);
   }
   let sections = categories.map((item, i) => {
-    ids[item.id] = i;
+    let { id } = item;
+    ids[id] = i;
     return {
       ...item,
+      key: id,
       data: [],
     };
   });
@@ -27,12 +29,15 @@ export default ({ categories, locations, match, sortMode }) => {
           sections.push({
             name: 'No category',
             id: 'No-category',
+            key: 'No-category',
             data: [],
           }) - 1;
       }
       index = noCategoryIndex;
     }
-    item.coords = item.coords.replace(/,\s*/, ', ');
+    if (item.coords) {
+      item.coords = item.coords.toString().replace(/,\s*/, ', ');
+    }
     sections[index].data.push(item);
   });
   sections = sections.filter(item => item.data.length);

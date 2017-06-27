@@ -8,7 +8,7 @@ const Form = ({ fields, mode, onSubmit, propsTextInput }) => {
   // console.log('form', fields, mode);
   return (
     <BaseForm style={mainCSS.form} onSubmit={onSubmit}>
-      <View style={mainCSS.row}>
+      <View style={mainCSS.formRow}>
         <TextInput
           placeholder={mode === 'add' ? 'New entry' : 'Edit entry'}
           style={mainCSS.input}

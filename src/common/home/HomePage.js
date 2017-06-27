@@ -4,12 +4,7 @@ import { mainCSS } from '../styles';
 
 const earth = require('./earth.jpg');
 
-const HomePage = () => {
-  return (
-    <View style={mainCSS.centerContainer}>
-      <Image source={earth} width={300} />
-    </View>
-  );
-};
-
-export default HomePage;
+export default () =>
+  <View style={[mainCSS.center, mainCSS.fullWindow]}>
+    <Image source={earth} width={300} />
+  </View>;

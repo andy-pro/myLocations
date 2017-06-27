@@ -4,7 +4,7 @@ import FormHelper from '../__components/FormHelper';
 import Form from './Form';
 import EditedList from '../__components/EditedList';
 import { View, Text, TouchLink } from '../components';
-import { colors, mainCSS } from '../styles';
+import { colors, mainCSS, sectionsCSS as styles } from '../styles';
 
 const toSections = ({ categories, sortMode }) => {
   let { data, error } = checkData(categories, Form.model.fields);
@@ -12,6 +12,7 @@ const toSections = ({ categories, sortMode }) => {
     {
       name: 'Categories',
       id: 'categories',
+      key: 'categories',
       data: sortListByMode(data, sortMode.name),
     },
   ];
@@ -31,8 +32,8 @@ export default EditedList({
 
 function renderSectionHeader({ section }) {
   return (
-    <View style={mainCSS.section}>
-      <Text style={mainCSS.sectionTitle}>
+    <View style={styles.header}>
+      <Text style={styles.title}>
         {section.name}
       </Text>
     </View>
@@ -45,12 +46,13 @@ function renderItem({ item }) {
     <TouchLink
       to={`/locations/${item.id}`}
       underlayColor={colors.touch}
-      style={[mainCSS.sectionItem, entry && entry.id === item.id && mainCSS.active]}
       onLongPress={() => this.onItemLongPress(item)}
     >
-      <Text style={mainCSS.a_link}>
-        {item.name}
-      </Text>
+      <View style={[styles.item, entry && entry.id === item.id && mainCSS.active]}>
+        <Text style={styles.anchor}>
+          {item.name}
+        </Text>
+      </View>
     </TouchLink>
   );
 }

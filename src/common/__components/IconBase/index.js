@@ -3,20 +3,25 @@ import { Svg } from '../../components';
 // import { splitOnce } from '../../__lib/utils';
 import svgs from './svgs';
 
+/*
+  'key' property for SVG
+  почему-то иногда не перерисовывается иконка
+  ???
+*/
 export default ({
   svg,
   name,
   stroke,
   strokeWidth,
-  size,
+  size = 32,
   viewBox = '0 0 40 40',
   height = '40',
   width = '40',
-  fill = '#000',
+  color = '#000',
 }) =>
-  <Svg height={size || height} width={size || width} viewBox={viewBox}>
-    {React.cloneElement(svg || svgs[name], {
-      fill,
+  <Svg height={size || height} width={size || width} viewBox={viewBox} key={name}>
+    {React.cloneElement(svg || svgs[name] || svgs['__no_name__'], {
+      fill: color,
       stroke,
       strokeWidth,
     })}

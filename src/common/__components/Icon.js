@@ -1,32 +1,22 @@
 import React from 'react';
-import { TouchableOpacity, Text, NavLink } from '../components';
-import IconBase from './IconBase';
+import { View, Text, IconLinkPlatform, IconButtonPlatform } from '../components';
+import Icon from './IconBase';
 import { mainCSS, iconColors } from '../styles';
 import os from '../os';
 
-const Icon = ({ name, color, size = 32 }) => {
-  return <IconBase name={name} fill={color} size={size} />;
-};
-
-const IconButton = ({
+const IconButtonBase = ({
   message,
   children,
-  title,
-  // size = 14, // size: isBrowser ? 15 : 20,
-  // size = iconProps.linkSize, // size: isBrowser ? 15 : 20,
   size,
   color = iconColors.main,
   backgroundColor = iconColors.bgMain,
   style,
   name,
-  onPress,
 }) => {
-  // size = 15;
-  // console.log('os', os);
-  size = size || os.isBrowser ? (os.isTouchDevice ? 16 : 14) : 20;
+  size = size || os.isBrowser ? (os.isTouchDevice ? 16 : 14) : 17;
   message = message || children;
   return (
-    <TouchableOpacity
+    <View
       style={[
         mainCSS.button,
         {
@@ -35,9 +25,6 @@ const IconButton = ({
         },
         style,
       ]}
-      onPress={onPress}
-      activeOpacity={0.8}
-      title={title}
     >
       <Icon size={size * 1.65} color={color} name={name} />
       {message &&
@@ -51,17 +38,11 @@ const IconButton = ({
         >
           {message}
         </Text>}
-    </TouchableOpacity>
+    </View>
   );
 };
 
-const IconLink = ({ to, ...props }) =>
-  <NavLink
-    style={mainCSS.a_link}
-    activeStyle={{ color: iconColors.main, textDecoration: 'underline' }}
-    to={to}
-  >
-    <IconButton {...props} />
-  </NavLink>;
+const IconButton = IconButtonPlatform(IconButtonBase);
+const IconLink = IconLinkPlatform(IconButtonBase);
 
-export { Icon, IconButton, IconLink };
+export { Icon, IconLink, IconButton };

@@ -9,11 +9,12 @@ export default ({ history, urlParts }) => {
   let { isBrowser, messages } = os,
     [root, name] = urlParts,
     title = messages[`links.${name || 'home'}.title`];
+  // console.log('urlParts', urlParts);
   return (
     <View style={headerCSS.root}>
       {isBrowser && <Helmet title={title} />}
       <View style={mainCSS.limited}>
-        <View style={mainCSS.centerContainer}>
+        <View style={mainCSS.center}>
           <Text style={headerCSS.title}>
             {title}
           </Text>

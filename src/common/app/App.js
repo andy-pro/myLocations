@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { appStart, appStop, resetForm } from './actions';
+import { appStart, appStop, appLayout, resetForm } from './actions';
 import { View, withRouter } from '../components';
+
 import Page from '../__components/Page';
 import config from '../../common/config';
+import { mainCSS } from '../styles';
 import os from '../../common/os';
 
 // Pages
@@ -31,8 +33,9 @@ class App extends React.Component {
     this.props.appStop();
   }
 
-  shouldComponentUpdate({ cmdToolbar, notify }) {
+  shouldComponentUpdate({ cmdToolbar }) {
     if (cmdToolbar !== this.props.cmdToolbar) {
+      // prevent re-render, but props must contain 'cmdToolbar'
       return false;
     }
     // if (notify !== this.props.notify) {
@@ -43,9 +46,15 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('%cApp render', 'color:blue;font-weight:bold', this.props);
+    // console.log('%cApp render', 'color:blue;font-weight:bold', this.props);
+    console.log('%cApp render', 'color:blue;font-weight:bold');
+    // <Page component={HomePage} />
+    let mainViewProps = { style: mainCSS.app };
+    if (os.isNative) {
+      mainViewProps.onLayout = e => this.props.appLayout(e.nativeEvent.layout);
+    }
     return (
-      <View>
+      <View {...mainViewProps}>
         <Page path="/" exact component={HomePage} />
         <Page path="/categories" component={CategoriesPage} />
         <Page path="/locations/:category?" component={LocationsPage} />
@@ -59,6 +68,7 @@ export default withRouter(
   connect(({ app }) => ({ cmdToolbar: app.cmdToolbar }), {
     appStart,
     appStop,
+    appLayout,
     resetForm,
   })(App)
 );

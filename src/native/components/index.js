@@ -1,23 +1,15 @@
-// import Icon from 'react-native-vector-icons/Ionicons';
-// import { Icon, IconButton } from '../../common/__components/Icon';
-// import SvgIconBase from '../../common/__components/SvgIconBase';
-
-// export { Icon, IconButton, SvgIconBase };
-
-export { Route, withRouter } from 'react-router-native';
-
-// import HeaderBar from '../HeaderBar'
 // import Match from '../Match'
-// import Modal from './Modal'
 // import Checkbox from '../Checkbox'
-// import FormWrapper from '../FormWrapper'
+// import Modal from './Modal'
 // import FileInput from './FileInput'
 // import DatePicker from './DatePicker'
+// export { Drawer } from './Drawer';
+import FormWrapper from '../../common/__components/FormWrapper';
 
-export { Link } from './Link';
-export { Link as NavLink } from 'react-router-native';
-export { Drawer } from './Drawer';
+export { TouchLink, IconLinkPlatform, IconButtonPlatform } from './controls';
+export { Route, Redirect, withRouter, Link as NavLink } from 'react-router-native';
 export { View as Form } from 'react-native';
+export { FormWrapper };
 export { Svg, G, Path } from 'react-native-svg';
 
 export {

@@ -5,13 +5,9 @@ export const headerCSS = StyleSheet.create({
   root: {
     backgroundColor: colors.header,
     paddingHorizontal: 6,
-    height: 46,
+    height: opts.headerH,
   },
-  toolbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  text: {
+  title: {
     color: colors.light,
     fontSize: opts.fontSize * 1.4,
   },

@@ -1,1 +1,1 @@
-require('./src/native');
+require('./src/native/Root');

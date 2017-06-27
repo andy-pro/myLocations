@@ -6,8 +6,8 @@ import { findNameByUrl } from '../__lib/find';
 import { View, Text } from '../components';
 import { deleteConfirm } from './Dialogs';
 import { IconButton } from './Icon';
-import { mainCSS, headerCSS as styles, iconStyles, iconColors } from '../styles';
-// import os from '../os';
+import { mainCSS, colors, iconStyles, iconColors } from '../styles';
+import os from '../os';
 
 // prettier-ignore
 const icons = {
@@ -27,11 +27,12 @@ const ToolBar = ({
   history,
   urlParts,
   activeEntry,
-  cmdToolbar,
-  setSortMode,
+  sortMode,
+  layout,
   categories,
   locations,
-  sortMode,
+  cmdToolbar,
+  setSortMode,
 }) => {
   let path = urlParts[0],
     // subTitle = urlParts[2],
@@ -39,10 +40,20 @@ const ToolBar = ({
     _cats = path === '/categories',
     _locs = path === '/locations',
     entryName = activeEntry ? activeEntry.name : '',
-    subTitle = findNameByUrl(urlParts, { categories, locations });
+    subTitle = findNameByUrl(urlParts, { categories, locations }),
+    subTitleWidth;
+
+  if (os.isNative) {
+    let { width, height } = layout;
+    subTitleWidth = {
+      // 5 icons + gaps ~ 250px
+      width: width ? width - 250 : 150,
+    };
+    // console.log('layout', width, height);
+  }
 
   // sortMode = sortMode || { index: 1, name: 'sort-asc' };
-  // console.log('ToolBar', sortMode);
+  // console.log('ToolBar', sortMode, 'sort' + sortMode.index);
 
   // let { isBrowser } = os,
   // homeIcon = isBrowser ? 'home' : 'menu';
@@ -87,9 +98,9 @@ const ToolBar = ({
 
   return (
     <View style={mainCSS.between}>
-      <View style={mainCSS.row}>
+      <View style={mainCSS.centerRow}>
         <IconButton {...iconSet('back')} />
-        <Text style={styles.subTitle}>
+        <Text style={[mainCSS.subTitle, { color: colors.light }, subTitleWidth]}>
           {entryName || subTitle}
         </Text>
       </View>
@@ -111,6 +122,7 @@ export default connect(
   ({ app, categories, locations }) => ({
     activeEntry: app.activeEntry,
     sortMode: app.sortMode,
+    layout: app.layout,
     categories,
     locations,
   }),
