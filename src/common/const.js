@@ -6,6 +6,7 @@ export const opts = {
   headerH: 66,
   footerH: 44,
   fontSize: 15,
+  maxWidth: 450,
 };
 
 export const colors = {
@@ -38,6 +39,7 @@ export const colors = {
 export const iconColors = {
   // main: colors.light,
   main: '#fff',
+  inverse: colors.dark,
   primary: '#522',
   active: colors.highlight,
   disabled: '#888',

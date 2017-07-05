@@ -15,8 +15,8 @@ export const sectionsCSS = StyleSheet.create({
     fontWeight: '600',
   },
   item: {
-    borderTopColor: colors.silver,
-    borderTopWidth: 1,
+    // borderTopColor: colors.silver,
+    // borderTopWidth: 1,
     paddingVertical: 5,
     paddingHorizontal: opts.gaps,
     marginHorizontal: 1,

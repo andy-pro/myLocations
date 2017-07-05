@@ -1,9 +1,23 @@
 {
   "name": "myLocations",
   "version": "0.1.0",
-  "repo": "https://github.com/andy-pro/myLocations",
+  "repository": "https://github.com/andy-pro/myLocations",
   "homepage": "http://andy-pro.github.io/myLocations",
   "private": true,
+  "scripts": {
+    "browser": "node replace browser&&react-scripts start",
+    "build": "node replace browser&&react-scripts build",
+    "//predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "android": "node replace native&&node node_modules/react-native/local-cli/cli.js run-android",
+    "native": "node replace native&&node node_modules/react-native/local-cli/cli.js start",
+    "apk": "node replace native&&cd android&&gradlew assembleRelease",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "serve": "serve -s build",
+    "log": "node node_modules/react-native/local-cli/cli.js log-android"
+  },
   "dependencies": {
     "fela": "^4.3.5",
     "fela-plugin-validator": "^4.3.5",
@@ -22,10 +36,12 @@
     "react-native": "0.43.4",
     "react-native-drawer": "2.3.0",
     "react-native-localization": "0.1.26",
+    "react-native-maps": "0.15.1",
     "react-native-svg": "4.6.1",
     "react-redux": "^5.0.5",
     "react-router-dom": "4.1.1",
     "react-router-native": "4.1.1",
+    "redux": "^3.7.1",
     "redux-observable": "^0.14.1",
     "redux-persist": "^4.8.0",
     "rxjs": "^5.4.0",
@@ -37,18 +53,5 @@
     "react-scripts": "0.9.5",
     "redux-logger": "^3.0.6",
     "replace-in-file": "2.5.0"
-  },
-  "scripts": {
-    "browser": "node replace browser&&react-scripts start",
-    "build": "node replace browser&&react-scripts build",
-    "//predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "android": "node replace native&&node node_modules/react-native/local-cli/cli.js run-android",
-    "native": "node replace native&&node node_modules/react-native/local-cli/cli.js start",
-    "apk": "node replace native&&cd android&&gradlew assembleRelease",
-    "start": "react-scripts start",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "serve": "serve -s build"
   }
 }

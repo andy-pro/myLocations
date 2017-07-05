@@ -13,15 +13,15 @@ export const mainCSS = {
   },
   main: {
     display: 'flex',
-    // marginHorizontal: opts.gaps,
-    // marginVertical: 60,
+    // flexDirection: 'column',
+    justifyContent: 'center',
     paddingTop: opts.headerH,
     paddingBottom: opts.footerH,
     minHeight: '100vh',
   },
-  page: {
-    paddingVertical: 20,
+  full: {
     flex: 1,
+    width: '100%',
   },
   limited: {
     // display: 'flex',
@@ -31,21 +31,29 @@ export const mainCSS = {
     maxWidth: 450,
     // height: '100%',
   },
-  full: {
+  list: {
     // display: 'flex',
     // position: 'relative',
     flex: 1,
+    paddingVertical: 20,
     // marginHorizontal: 'auto',
     // maxWidth: 450,
   },
   fullWindow: {
+    flex: 1,
     width: '100%',
     height: '100%',
   },
+  fillContainer: {
+    position: 'relative',
+    width: '100%',
+    // height: 'initial',
+    flex: 1,
+  },
   center: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     // position: 'relative',
   },
 
@@ -110,6 +118,10 @@ export const mainCSS = {
     marginHorizontal: 5,
   },
   input: {
+    ':focus': {
+      borderColor: colors.mainTouch,
+      boxShadow: 'inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,136,138,.6)',
+    },
     width: 0,
     outline: 0,
     flex: 1,
@@ -119,6 +131,7 @@ export const mainCSS = {
     // marginBottom: 6,
     borderRadius: 4,
     marginHorizontal: 5,
+    transition: 'border-color ease-in-out .15s, box-shadow ease-in-out .15s',
     ...colors.border,
   },
   button: {
@@ -171,6 +184,11 @@ export const mainCSS = {
     position: 'fixed',
     width: '100%',
     height: opts.footerH,
+  },
+  fixedBottom: {
+    bottom: 0,
+    position: 'fixed',
+    width: '100%',
   },
   f_link: {
     color: colors.light,

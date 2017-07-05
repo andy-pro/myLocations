@@ -5,19 +5,23 @@
 // import DatePicker from './DatePicker'
 // export { Drawer } from './Drawer';
 import FormWrapper from '../../common/__components/FormWrapper';
+// import SectionList from './SectionList';
+
+import MapView, { MAP_TYPES } from 'react-native-maps';
+export { MapView, MAP_TYPES };
 
 export { TouchLink, IconLinkPlatform, IconButtonPlatform } from './controls';
 export { Route, Redirect, withRouter, Link as NavLink } from 'react-router-native';
 export { View as Form } from 'react-native';
-export { FormWrapper };
 export { Svg, G, Path } from 'react-native-svg';
+export { FormWrapper };
 
 export {
   Text,
   View,
   Button,
   ListView,
-  FlatList,
+  // FlatList,
   SectionList,
   TextInput,
   ScrollView,

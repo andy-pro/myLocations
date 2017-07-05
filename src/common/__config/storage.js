@@ -3,7 +3,7 @@ import { pick } from '../__lib/utils';
 
 // prettier-ignore
 const paths = [
-  ['app', ['currentLocale', 'sortMode']], 
+  ['app', ['currentLocale', 'sortMode', 'mapViewMode']], 
   ['categories'], 
   ['locations']
 ];

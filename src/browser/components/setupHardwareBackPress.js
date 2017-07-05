@@ -25,7 +25,7 @@ export default os => {
       case 'hardwareBackPress':
         document.onkeydown = e => {
           if (Number(e.keyCode) === 27 && handler) {
-            return handler();
+            return !handler();
           }
         };
         break;

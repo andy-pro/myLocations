@@ -1,13 +1,12 @@
 import React from 'react';
-import { Form as BaseForm, View, TextInput } from '../components';
-import { IconButton } from '../__components/Icon';
+import { Form as BaseForm, View, TextInput, IconButton } from '../components';
 import { removeSpecial } from '../__lib/utils';
-import { colors, mainCSS } from '../styles';
+import { mainCSS } from '../styles';
 
 const Form = ({ fields, mode, onSubmit, propsTextInput }) => {
   // console.log('form', fields, mode);
   return (
-    <BaseForm style={mainCSS.form} onSubmit={onSubmit}>
+    <BaseForm style={[mainCSS.form, mainCSS.divider]} onSubmit={onSubmit}>
       <View style={mainCSS.formRow}>
         <TextInput
           placeholder={mode === 'add' ? 'New entry' : 'Edit entry'}
@@ -17,9 +16,7 @@ const Form = ({ fields, mode, onSubmit, propsTextInput }) => {
         />
         <IconButton
           name={mode === 'add' ? 'md-add-circle' : 'md-edit'}
-          backgroundColor={colors.primary}
           onPress={onSubmit}
-          style={{ marginLeft: 10 }}
         />
       </View>
     </BaseForm>
@@ -28,7 +25,7 @@ const Form = ({ fields, mode, onSubmit, propsTextInput }) => {
 
 Form.model = {
   submit: 'onSubmit',
-  fields: { fn: 'name', vd: 'required', pp: removeSpecial },
+  fields: { fn: 'name', vd: 'required', af: true, pp: removeSpecial },
 };
 
 export default Form;

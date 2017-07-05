@@ -15,16 +15,6 @@ const toSections = ({ locations, ...props }) => {
   return sections;
 };
 
-export default EditedList({
-  listName: 'locations',
-  stateProps: ['categories', 'locations'],
-  Form: FormHelper(Form),
-  renderSectionHeader,
-  renderItem,
-  isDataChanged,
-  toSections,
-});
-
 function renderSectionHeader({ section }) {
   return (
     <View style={styles.header}>
@@ -81,3 +71,36 @@ function renderItem({ item }) {
 function isDataChanged({ categories, locations }) {
   return categories !== this.props.categories || locations !== this.props.locations;
 }
+
+function onFormMount(props) {
+  // if (cmdToolbar && cmdToolbar.path === '/map' && mode === 'add') {
+  //   console.log('form on add map props', this.props);
+  // }
+  // console.log('onMount locations form props', props);
+  let { cmdToolbar, mode, entry, fields } = props;
+  if (cmdToolbar) {
+    let { external, path } = cmdToolbar;
+    if (external && mode === 'add' && path === '/map') {
+      fields.__setState({
+        coords: `${entry.latitude.toPrecision(7)}, ${entry.longitude.toPrecision(7)}`,
+        zoom: entry.zoom,
+      });
+    }
+  }
+}
+
+function onListMount({ cmdToolbar, resetActiveEntry }) {
+  if (cmdToolbar && cmdToolbar.external) return;
+  resetActiveEntry();
+}
+
+export default EditedList({
+  listName: 'locations',
+  stateProps: ['categories', 'locations'],
+  Form: FormHelper(Form, onFormMount),
+  onListMount,
+  renderSectionHeader,
+  renderItem,
+  isDataChanged,
+  toSections,
+});

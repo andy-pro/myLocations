@@ -7,6 +7,7 @@ export default {
 
   isCoords: orig => {
     if (!orig) return false;
+    // [x.xxx, y.yyy] or 'x.xxx, y.yyy'
     let v = Array.isArray(orig) ? orig : orig.split(','),
       x = ('' + v[0]).trim(),
       y = ('' + v[1]).trim(),

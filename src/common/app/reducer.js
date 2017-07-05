@@ -7,6 +7,7 @@ const initialState = {
   menuShown: false,
   online: false,
   started: false,
+  dataReady: false,
   listName: '',
   activeEntry: null,
   cmdToolbar: null,
@@ -16,6 +17,8 @@ const initialState = {
   locales: null,
   messages: null,
   layout: {},
+  initialRegion: null,
+  mapViewMode: 'STANDARD',
 };
 
 const sortModes = ['sort-alpha', 'sort-asc', 'sort-desc'];
@@ -67,12 +70,27 @@ const reducer = (state = initialState, action) => {
       let name = sortModes[payload];
       return { ...state, sortMode: { index: payload, name } };
 
+    case 'SET_MAP_VIEW':
+      return { ...state, mapViewMode: payload };
+
+    case 'CMD_TOOLBAR':
+      return { ...state, cmdToolbar: payload };
+
+    case 'RESET_FORM':
+      return { ...state, cmdToolbar: null };
+
     case 'SET_ACTIVE_ENTRY':
       let { listName, entry } = payload;
       return { ...state, listName, activeEntry: entry };
 
     case 'RESET_ACTIVE_ENTRY':
-      return { ...state, listName: '', activeEntry: null, cmdToolbar: null };
+      return {
+        ...state,
+        listName: '',
+        activeEntry: null,
+        cmdToolbar: null,
+        // region: null,
+      };
 
     case 'categories/UPDATED':
     case 'notify/categories/UPDATED':
@@ -84,18 +102,14 @@ const reducer = (state = initialState, action) => {
       }
       return state;
 
-    case 'CMD_TOOLBAR':
-      return { ...state, cmdToolbar: payload };
-
-    case 'RESET_FORM':
-      return { ...state, cmdToolbar: null };
-
     // process all the keys listed in 'config/storage.path
     case REHYDRATE:
       let { app } = payload;
       if (app) {
-        if (app.currentLocale) state = setLocale(state, app.currentLocale);
-        if (app.sortMode) state = { ...state, sortMode: app.sortMode };
+        state = Object.assign({}, state, app, { dataReady: true });
+        // if (app.currentLocale) state = setLocale(state, app.currentLocale);
+        // if (app.sortMode) state = { ...state, sortMode: app.sortMode };
+        // if (app.mapViewMode) state = { ...state, mapViewMode: app.mapViewMode };
       }
       return state;
 

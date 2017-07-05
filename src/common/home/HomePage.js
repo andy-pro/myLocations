@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Image } from '../components';
+import { TouchableOpacity, View, Image } from '../components';
 import { mainCSS } from '../styles';
 
 const earth = require('./earth.jpg');
 
-export default () =>
-  <View style={[mainCSS.center, mainCSS.fullWindow]}>
-    <Image source={earth} width={300} />
+export default ({ history }) =>
+  <View style={mainCSS.center}>
+    <TouchableOpacity activeOpacity={0.9} onPress={() => history.push('/map')}>
+      <Image source={earth} width={300} />
+    </TouchableOpacity>
   </View>;

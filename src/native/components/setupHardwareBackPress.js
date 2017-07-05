@@ -1,12 +1,10 @@
+import { BackAndroid } from 'react-native';
+
 export default os => {
   os.subscribe = (type, handler) => {
     switch (type) {
       case 'hardwareBackPress':
-        // document.onkeydown = e => {
-        //   if (Number(e.keyCode) === 27 && handler) {
-        //     return handler();
-        //   }
-        // };
+        BackAndroid.addEventListener('hardwareBackPress', handler);
         break;
 
       default:

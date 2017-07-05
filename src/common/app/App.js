@@ -22,9 +22,9 @@ class App extends React.Component {
       os.subscribe('hardwareBackPress', () => {
         if (this.props.cmdToolbar) {
           this.props.resetForm();
-          return false;
+          return true;
         }
-        return true;
+        return false;
       });
     }
   }

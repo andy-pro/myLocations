@@ -1,0 +1,52 @@
+import React from 'react';
+
+import ScriptCache from './lib/ScriptCache';
+import GoogleApi from './lib/GoogleApi';
+
+const defaultCreateCache = options => {
+  options = options || {};
+  const { apiKey } = options;
+  const libraries = options.libraries || ['places'];
+  const version = options.version || '3';
+
+  return ScriptCache({
+    google: GoogleApi({ apiKey: apiKey, libraries: libraries, version: version }),
+  });
+};
+
+export const wrapper = options => WrappedComponent => {
+  const createCache = options.createCache || defaultCreateCache;
+
+  class Wrapper extends React.Component {
+    constructor(props, context) {
+      super(props, context);
+
+      this.scriptCache = createCache(options);
+      this.scriptCache.google.onLoad(this.onLoad.bind(this));
+
+      this.state = {
+        loaded: false,
+        map: null,
+        google: null,
+      };
+    }
+
+    onLoad(err, tag) {
+      this._gapi = window.google;
+
+      this.setState({ loaded: true, google: this._gapi });
+    }
+
+    render() {
+      const props = Object.assign({}, this.props, {
+        loaded: this.state.loaded,
+        google: window.google,
+      });
+      return <WrappedComponent {...props} />;
+    }
+  }
+
+  return Wrapper;
+};
+
+export default wrapper;

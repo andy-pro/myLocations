@@ -13,12 +13,10 @@ export default ({ history, urlParts }) => {
   return (
     <View style={headerCSS.root}>
       {isBrowser && <Helmet title={title} />}
-      <View style={mainCSS.limited}>
-        <View style={mainCSS.center}>
-          <Text style={headerCSS.title}>
-            {title}
-          </Text>
-        </View>
+      <View style={[mainCSS.full, mainCSS.limited]}>
+        <Text style={headerCSS.title}>
+          {title}
+        </Text>
         {root !== '/' && <ToolBar urlParts={urlParts} history={history} />}
       </View>
     </View>

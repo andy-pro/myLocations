@@ -119,6 +119,7 @@ const wrapper = forms => WrappedComponent => {
             let v = opts[fn],
               t = __types[fn];
             if (fields.hasOwnProperty(fn)) {
+              if (t === 'text') v = '' + v;
               fields[fn][TYPES[t].value] = v;
               fields.__state[fn] = v;
               if (!isNative && t === 'file') {

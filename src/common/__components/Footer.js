@@ -1,6 +1,5 @@
 import React from 'react';
-import { View } from '../components';
-import { IconLink } from './Icon';
+import { View, IconLink } from '../components';
 import { mainCSS } from '../styles';
 
 export default () =>

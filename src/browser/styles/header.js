@@ -15,6 +15,8 @@ export const headerCSS = {
   },
   title: {
     fontSize: opts.fontSize * 1.2,
+    display: 'block',
+    textAlign: 'center',
     // marginVertical: 2,
   },
 };

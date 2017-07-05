@@ -2,8 +2,8 @@ import { colors } from '../../common/const';
 
 export const roundBtnCSS = {
   button: {
-    position: 'fixed',
-    // position: 'absolute',
+    // position: 'fixed',
+    position: 'absolute',
     bottom: 90,
     // right: 50,
     right: 25,

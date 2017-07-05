@@ -10,9 +10,25 @@ const propsTextInput = {
   autoCapitalize: 'sentences',
 };
 
-export default Form =>
+export default (Form, onFormMount) =>
   FormWrapper(Form.model)(
     class extends React.Component {
+      componentWillMount() {
+        let { mode, entry, fields } = this.props;
+        if (mode === 'edit') {
+          fields.__setState(entry);
+        }
+        if (onFormMount) onFormMount(this.props);
+      }
+
+      // componentDidMount() {
+      //   this.setFocus();
+      // }
+
+      // setFocus = () => {
+      // if (this.props.mode) this.props.fields.__refs.name.focus();
+      // };
+
       shouldComponentUpdate({ mode, entry }) {
         let editMode = mode === 'edit',
           newEntry = entry !== this.props.entry && editMode,
@@ -24,21 +40,6 @@ export default Form =>
         }
         return true;
       }
-
-      componentWillMount() {
-        let { mode, entry, fields } = this.props;
-        if (mode === 'edit') {
-          fields.__setState(entry);
-        }
-      }
-
-      componentDidMount() {
-        this.setFocus();
-      }
-
-      setFocus = () => {
-        // if (this.props.mode) this.props.fields.__refs.name.focus();
-      };
 
       onSubmit = e => {
         let { props } = this,

@@ -1,10 +1,11 @@
 /* browser components */
 import Helmet from 'react-helmet';
 
+import ListView from './ListView';
 import FlatList from './FlatList';
 import SectionList from './SectionList';
 // import Link from './Link';
-import DropdownMenu from './DropdownMenu';
+// import DropdownMenu from './DropdownMenu';
 
 // import HeaderBar from '../HeaderBar';
 // import Checkbox from '../Checkbox';
@@ -14,7 +15,9 @@ import FormWrapper from '../../common/__components/FormWrapper';
 // import MenuLink from './MenuLink';
 // import DatePicker from './DatePicker'
 import { View } from './fela';
-import ListView from './ListView';
+
+import MapView, { MAP_TYPES } from './GoogleMapsReact';
+export { MapView, MAP_TYPES };
 
 export {
   Text,
@@ -28,14 +31,15 @@ export {
   Image,
   Picker,
   Svg,
-  G,
-  Path,
 } from './fela';
 
 export { View, View as Drawer };
-export { Route, Redirect, withRouter, NavLink } from 'react-router-dom';
+export { Route, Redirect, withRouter } from 'react-router-dom';
 
-export { TouchLink, IconLinkPlatform, IconButtonPlatform } from './controls';
+export { IconButton, IconLink } from './icons';
+
+// export { TouchLink, IconLinkPlatform, IconButtonPlatform } from './controls';
+export { TouchLink } from './Link';
 
 const Alert = {
   alert: (hdr, msg, btns) => {
@@ -46,12 +50,12 @@ const Alert = {
 };
 
 export {
+  ListView,
   FlatList,
   SectionList,
   // Link,
-  DropdownMenu,
+  // DropdownMenu,
   Helmet,
-  ListView,
   Alert,
   FormWrapper,
   // Checkbox,

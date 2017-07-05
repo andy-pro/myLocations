@@ -1,10 +1,14 @@
 import { StyleSheet } from 'react-native';
 import { opts, colors, iconColors } from '../../common/const';
 
-export { colors, iconColors };
+export { opts, colors, iconColors };
 export { headerCSS } from './header';
 export { sectionsCSS } from './sections';
 export { roundBtnCSS } from './roundBtn';
+
+/*
+justifyContent: 'flex-start', 'flex-end', 'center', 'space-between', 'space-around'
+*/
 
 export const mainCSS = StyleSheet.create({
   app: {
@@ -13,19 +17,30 @@ export const mainCSS = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.background,
+    alignItems: 'center',
   },
   main: {
     flex: 1,
-    backgroundColor: colors.background,
-  },
-  page: {
-    flex: 1,
-  },
-  limited: {
-    flex: 1,
-    // maxWidth: 450,
+    width: '100%',
+    // alignItems: 'center',
+    // backgroundColor: colors.background,
   },
   full: {
+    flex: 1,
+    width: '100%',
+    // alignItems: 'center',
+    // backgroundColor: colors.background,
+  },
+  limited: {
+    // flex: 1,
+    maxWidth: opts.maxWidth,
+    // width: '100%',
+    // borderWidth: 1,
+    // borderColor: 'black',
+    // backgroundColor: 'yellow',
+    // justifyContent: 'space-between',
+  },
+  list: {
     flex: 1,
   },
   fullWindow: {
@@ -35,6 +50,12 @@ export const mainCSS = StyleSheet.create({
   center: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  fillContainer: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  fill: {
+    ...StyleSheet.absoluteFillObject,
   },
 
   text: {
@@ -50,7 +71,7 @@ export const mainCSS = StyleSheet.create({
   },
 
   divider: {
-    borderBottomColor: colors.dark,
+    borderBottomColor: colors.silver,
     borderBottomWidth: 1,
   },
 
@@ -68,7 +89,7 @@ export const mainCSS = StyleSheet.create({
   },
   between: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    // alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
   pullRightRow: {
@@ -84,13 +105,15 @@ export const mainCSS = StyleSheet.create({
 
   /* form styles */
   form: {
-    paddingTop: 6,
-    paddingBottom: 4,
-    paddingHorizontal: 15,
+    paddingVertical: 6,
+    paddingHorizontal: opts.gaps,
     backgroundColor: colors.active,
   },
   formRow: {
     flexDirection: 'row',
+  },
+  formBtn: {
+    marginBottom: 3,
   },
   input: {
     flex: 1,
@@ -103,8 +126,11 @@ export const mainCSS = StyleSheet.create({
     flex: 1,
     // flexDirection: 'row',
     // paddingHorizontal: 8,
-    paddingVertical: 0,
-    // marginTop: 4
+    // paddingLeft: -5,
+    // margin: 0,
+    height: 35,
+    marginTop: 6,
+    // lineHeight: 1,
   },
   button: {
     borderWidth: 1,
@@ -113,6 +139,15 @@ export const mainCSS = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 6,
     paddingVertical: 4,
+  },
+
+  backBtn: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    padding: 12,
+    width: 80,
+    justifyContent: 'center',
   },
 
   /* links */
@@ -124,6 +159,9 @@ export const mainCSS = StyleSheet.create({
     textDecorationLine: 'underline',
     // backgroundColor: '#ffa',
   },
+  a_link: {
+    padding: 6,
+  },
 
   /* footer */
   footer: {
@@ -131,7 +169,7 @@ export const mainCSS = StyleSheet.create({
     backgroundColor: colors.footer,
     // bottom: 0,
     // position: 'fixed',
-    // width: '100%',
+    width: '100%',
     height: opts.footerH,
   },
   f_link: {

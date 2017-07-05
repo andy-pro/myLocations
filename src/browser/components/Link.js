@@ -1,26 +1,16 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+// import { NavLink } from 'react-router-dom';
+// import { Text, Linking, TouchableOpacity } from 'react-native';
+// import { mainCSS, iconColors } from '../styles';
+// import { TouchableOpacity, TouchableHighlight } from './fela';
+import { TouchableOpacity } from './fela';
 
-import { Text, AnchorLink, TouchableHighlight } from './fela';
-import { mainCSS } from '../styles';
+const TouchLink = ({ to, ...props }, { router }) =>
+  <TouchableOpacity to={() => router.history.push(to)} {...props} />;
 
-const Link = ({ to, exactly, style, message, children, ...props }) =>
-  typeof to === 'function'
-    ? <Text onClick={to} style={mainCSS.t_link} />
-    : to.includes('://')
-      ? <AnchorLink href={to} target="_blank" style={[mainCSS.h_link, style]} {...props}>
-          {props.message}
-        </AnchorLink>
-      : <TouchableHighlight style={[style, mainCSS.v_link]} {...props}>
-          <NavLink
-            exact={props.exactly}
-            to={to}
-            style={mainCSS.a_link}
-            activeStyle={{ textDecoration: 'underline' }}
-          >
-            {message}
-            {children}
-          </NavLink>
-        </TouchableHighlight>;
+TouchLink.contextTypes = {
+  router: PropTypes.object,
+};
 
-export default Link;
+export { TouchLink };

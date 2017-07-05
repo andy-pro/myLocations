@@ -17,7 +17,9 @@ const messages = new LocalizedStrings(require('../common/__messages'));
 setupHardwareBackPress(os);
 os.isNative = true;
 os.messages = messages;
-os.platform = Platform.OS;
+// os.platform = Platform.OS;
+os.isIos = Platform.OS === 'ios';
+os.isAndroid = Platform.OS === 'android';
 /* platform dependencies */
 
 const getDefaultDeviceLocale = () => {

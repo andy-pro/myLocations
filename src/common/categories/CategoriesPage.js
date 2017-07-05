@@ -20,16 +20,6 @@ const toSections = ({ categories, sortMode }) => {
   return sections;
 };
 
-export default EditedList({
-  listName: 'categories',
-  stateProps: ['categories'],
-  Form: FormHelper(Form),
-  renderSectionHeader,
-  renderItem,
-  isDataChanged,
-  toSections,
-});
-
 function renderSectionHeader({ section }) {
   return (
     <View style={styles.header}>
@@ -60,3 +50,14 @@ function renderItem({ item }) {
 function isDataChanged({ categories }) {
   return categories !== this.props.categories;
 }
+
+export default EditedList({
+  listName: 'categories',
+  stateProps: ['categories'],
+  Form: FormHelper(Form),
+  onListMount: props => props.resetActiveEntry(),
+  renderSectionHeader,
+  renderItem,
+  isDataChanged,
+  toSections,
+});

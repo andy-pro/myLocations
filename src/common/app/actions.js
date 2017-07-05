@@ -28,9 +28,11 @@ export const setCurrentLocale = locale => ({
 export const appLayout = ({ width, height }) => ({
   type: 'APP_LAYOUT',
   payload: {
-    orientation: width > height ? 'LANDSCAPE' : 'PORTRAIT',
+    // orientation: width > height ? 'LANDSCAPE' : 'PORTRAIT',
+    isLandscape: width > height,
     width,
     height,
+    aspectRatio: width / height,
   },
 });
 
@@ -39,17 +41,22 @@ export const setSortMode = payload => ({
   payload,
 });
 
+export const setMapView = payload => ({
+  type: 'SET_MAP_VIEW',
+  payload,
+});
+
 export const setActiveEntry = payload => ({
   type: 'SET_ACTIVE_ENTRY',
   payload,
 });
 
-export const resetForm = () => ({
-  type: 'RESET_FORM',
-});
-
 export const resetActiveEntry = () => ({
   type: 'RESET_ACTIVE_ENTRY',
+});
+
+export const resetForm = () => ({
+  type: 'RESET_FORM',
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -57,7 +64,7 @@ export const listAction = (list, payload, cmd, opts) => ({
   type: 'epic/UPDATE',
   list,
   payload,
-  cmd, // add, update, remove, purge, replace
+  cmd, // add, edit, remove, purge, replace
   opts,
 });
 
@@ -68,6 +75,7 @@ export const cmdToolbar = payload => {
     let list = path.replace(/^\//, '');
     return listAction(list, activeEntry.id, cmd);
   }
+  payload.isForm = cmd === 'add' || cmd === 'edit';
   return {
     type: 'CMD_TOOLBAR',
     payload,
@@ -75,6 +83,9 @@ export const cmdToolbar = payload => {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* It's just a stub, immediately resolving an observer.
+   Here you can provide any asynchronous operation, for example, ajax request. 
+   https://redux-observable.js.org/docs/basics/Epics.html */
 const cmdUpdateLocal = payload => Observable.of(payload);
 
 const cmdEpic = action$ =>

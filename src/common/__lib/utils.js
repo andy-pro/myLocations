@@ -84,6 +84,8 @@ export const splitCategory = category => category.split('/').map(c => removeSpec
 export const slugifyCategory = category =>
   category.split('/').map(c => getSlug(c)).filter(c => Boolean(c)).join('/');
 
+/* =============  operations on local collections  ================== */
+
 export const cmdUpdateLocal = (list, { cmd, payload }) => {
   // console.log('utils', cmd, payload);
   switch (cmd) {
