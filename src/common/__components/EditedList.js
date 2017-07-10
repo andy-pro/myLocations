@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setActiveEntry, resetActiveEntry, listAction, resetForm } from '../app/actions';
+import { setCommand, setEntry, resetEntry, resetForm } from '../app/actions';
 import { View, SectionList } from '../components';
-import { deleteDamaged } from './Dialogs';
+import Dialogs from './Dialogs';
 import { mainCSS } from '../styles';
 
 const mapStateToProps = stateProps => state => {
   let { app } = state,
     props = {
-      cmdToolbar: app.cmdToolbar,
-      entry: app.activeEntry,
+      command: app.command,
+      entry: app.entry,
       sortMode: app.sortMode,
     };
   stateProps.forEach(key => (props[key] = state[key]));
@@ -27,28 +27,29 @@ export default ({
   toSections,
 }) =>
   connect(mapStateToProps(stateProps), {
-    setActiveEntry,
-    resetActiveEntry,
-    listAction,
+    /* actions */
+    setCommand,
+    setEntry,
+    resetEntry,
     resetForm,
   })(
     class extends React.Component {
       componentWillMount() {
         let { props } = this,
-          { cmdToolbar } = props;
+          { command } = props;
         this.sections = this.checkAndToSections(props);
-        if (cmdToolbar) {
-          if (cmdToolbar.isForm) this.mode = cmdToolbar.cmd;
+        if (command) {
+          if (command.isForm) this.mode = command.name;
         }
         if (onListMount) onListMount(props);
       }
 
       componentWillReceiveProps(nextProps) {
-        let { cmdToolbar } = nextProps;
-        if (cmdToolbar !== this.props.cmdToolbar) {
-          if (cmdToolbar) {
-            if (cmdToolbar.isForm) {
-              this.mode = cmdToolbar.cmd;
+        let { command } = nextProps;
+        if (command !== this.props.command) {
+          if (command) {
+            if (command.isForm) {
+              this.mode = command.name;
             }
           } else {
             this.mode = '';
@@ -63,31 +64,35 @@ export default ({
         let sections = toSections(props),
           { error } = sections;
         if (error) {
-          deleteDamaged(error.info);
-          this.props.listAction(listName, error.indexes, 'purge');
+          Dialogs.deleteDamaged(error.info);
+          this.props.setCommans({
+            name: 'purge',
+            path: listName,
+            entry: error.indexes,
+          });
         }
         return sections;
       };
 
       onItemLongPress = entry =>
-        this.props.setActiveEntry({
+        this.props.setEntry({
           listName,
           entry,
         });
 
-      renderItemSeparator = () => <View style={mainCSS.divider} />;
-
       render() {
         let { mode, sections } = this;
-        // console.log('this EDITED LIST render', this.props, mode, sections);
+        // console.log('this EDITED LIST render', mode);
         return (
-          <View style={mainCSS.list}>
+          <View style={[mainCSS.fullArea, mainCSS.limited]}>
             {Boolean(mode) && <Form mode={mode} listName={listName} {...this.props} />}
             <SectionList
+              contentContainerStyle={mainCSS.list}
               sections={sections}
               renderSectionHeader={renderSectionHeader}
               renderItem={renderItem.bind(this)}
-              ItemSeparatorComponent={this.renderItemSeparator}
+              ItemSeparatorComponent={() => <View style={mainCSS.divider} />}
+              SectionSeparatorComponent={() => <View style={mainCSS.vgap20} />}
               keyExtractor={item => item.id}
             />
           </View>

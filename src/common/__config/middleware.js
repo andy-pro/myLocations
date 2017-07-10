@@ -1,5 +1,5 @@
 import { createEpicMiddleware } from 'redux-observable';
-import { createLogger } from 'redux-logger';
+// import { createLogger } from 'redux-logger';
 
 import configureDeps from './deps';
 import configureEpics from './epics';
@@ -15,6 +15,7 @@ const configureMiddleware = (initialState, platformDeps, platformMiddleware) => 
 
   const middleware = [injectMiddleware(deps), epicMiddleware, ...platformMiddleware];
 
+  /*
   const { isBrowser } = initialState.app,
     enableLogger = process.env.NODE_ENV === 'development' && isBrowser;
   //&& (process.env.IS_BROWSER || initialState.device.isReactNative);
@@ -38,7 +39,6 @@ const configureMiddleware = (initialState, platformDeps, platformMiddleware) => 
       module.hot.accept(__epics);
     }
   }
-  /*
   */
 
   return middleware;

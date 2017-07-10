@@ -1,21 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, IconButton, MapView, MAP_TYPES } from '../components';
-import { setActiveEntry } from '../app/actions';
-// import { IconButton } from '../__components/Icon';
+import { View, IconButton, MapView, MAP_TYPES, PROVIDER_GOOGLE } from '../components';
+import { setEntry } from '../app/actions';
 import { findItemById } from '../__lib/find';
 import validator from '../__lib/validator';
 import { makeCancelable } from '../__lib/cancelablePromise';
 import { mainCSS, iconColors } from '../styles';
+import os from '../os';
 
 // const defaultCoords = [50.6092, 33.4515];
 // const defaultCoords = [28.95626, -3.493260];
-const initialCoords = [36.5174, -26.1953], // center of world
+const initialCoords = [36.5174, -26.1953], // center of world :)
   // const initialCoords = [37.774929, -122.419416], // San-Francisco
 
   // initialZoom = 0.5, // native
-  initialZoom = 2, // browser
+  // initialZoom = 2, // browser
   defaultZoom = 9;
 
 class MapPage extends React.Component {
@@ -27,13 +27,17 @@ class MapPage extends React.Component {
     super(props);
     if (props.dataReady) {
       this.region = this.getRegion(props);
-      // if (!coords.initial)
+    }
+  }
+
+  componentWillMount() {
+    if (this.region) {
       this.setRegion(this.region);
     }
   }
 
-  setRegion = entry => {
-    this.props.setActiveEntry({ listName: 'map', entry });
+  setRegion = region => {
+    this.props.setEntry({ listName: 'map', entry: { region } });
   };
 
   getRegion = props => {
@@ -49,14 +53,24 @@ class MapPage extends React.Component {
     };
   };
 
+  zoomToDelta = zoom => {
+    let { isLandscape, width, height, aspectRatio } = this.props.layout,
+      size = isLandscape ? height : width,
+      x = size * 0.39 / Math.pow(1.82, zoom);
+    return { x, y: x * aspectRatio, size };
+  };
+
   componentWillReceiveProps(nextProps) {
-    let { region, locations } = nextProps;
+    let { entry, dataReady, locations } = nextProps,
+      region = entry ? entry.region : {},
+      dataChanged =
+        dataReady !== this.props.dataReady || locations !== this.props.locations;
     //prettier-ignore
-    // console.log('ooo, we are receive new nextProps', 'region changed:', region !== this.region, 'locations changed:', locations !== this.props.locations, nextProps);
+    // console.log('MapPage receive new props', 'region changed:', region !== this.region, 'data changed:', dataChanged, nextProps);
     if (region !== this.region) {
-      this.region = nextProps.region;
+      this.region = region;
     }
-    if (locations !== this.props.locations) {
+    if (dataChanged) {
       this.region = this.getRegion(nextProps);
       this.setRegion(this.region);
     }
@@ -71,13 +85,6 @@ class MapPage extends React.Component {
     if (this.manual) region.manual = true;
     this.setRegion(region);
     // console.log('region', region);
-  };
-
-  zoomToDelta = zoom => {
-    let { isLandscape, width, height, aspectRatio } = this.props.layout,
-      size = isLandscape ? height : width,
-      x = size * 0.39 / Math.pow(1.82, zoom);
-    return { x, y: x * aspectRatio, size };
   };
 
   regionToZoom = region => {
@@ -111,7 +118,8 @@ class MapPage extends React.Component {
     if (!coords) {
       coords = initialCoords;
       coords.initial = true;
-      zoom = initialZoom;
+      // zoom = initialZoom;
+      zoom = os.isBrowser ? 2 : 0.5;
     }
     // ShowPositon(this.map, coords[0], coords[1], zoom);
     // console.log('calc coords from window.location', coords, zoom);
@@ -157,17 +165,17 @@ class MapPage extends React.Component {
     />;
 
   render() {
-    // console.log('map page render', this.props.layout, this.region);
+    // console.log('map page render', this.props.mapViewMode, this.props.dataReady);
     if (!this.props.dataReady) return null;
     return (
-      <View style={mainCSS.fillContainer}>
+      <View style={mainCSS.fullArea}>
         <MapView
-          provider={this.props.provider}
+          provider={PROVIDER_GOOGLE}
           ref={ref => {
             this.map = ref;
           }}
           mapType={MAP_TYPES[this.props.mapViewMode]}
-          style={mainCSS.fill}
+          style={mainCSS.fullMain}
           initialRegion={this.region}
           onRegionChangeComplete={this.onRegionChange}
           onPanDrag={() => (this.manual = true)}
@@ -180,25 +188,9 @@ class MapPage extends React.Component {
 
 export default connect(
   ({ app, locations }) => ({
-    layout: app.layout,
-    region: app.activeEntry,
+    entry: app.entry,
     mapViewMode: app.mapViewMode,
     locations,
   }),
-  { setActiveEntry }
+  { setEntry }
 )(MapPage);
-
-/*
-        <View style={[styles.bubble, styles.latlng]}>
-          <Text style={{ textAlign: 'center' }}>
-            {this.region.latitude.toPrecision(7)},
-            {this.region.longitude.toPrecision(7)}
-          </Text>
-        </View>
-        <View style={[styles.bubble, styles.latlng]}>
-          <Text style={{ textAlign: 'center' }}>
-            {this.region.latitudeDelta.toPrecision(7)},
-            {this.region.longitudeDelta.toPrecision(7)}
-          </Text>
-        </View>
-*/

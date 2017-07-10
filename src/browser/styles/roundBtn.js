@@ -2,21 +2,19 @@ import { colors } from '../../common/const';
 
 export const roundBtnCSS = {
   button: {
-    // position: 'fixed',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
-    bottom: 90,
-    // right: 50,
+    bottom: 30,
     right: 25,
     borderRadius: 30,
     backgroundColor: colors.header,
     width: 60,
     height: 60,
     opacity: 0.5,
-    zIndex: 2,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     boxShadow: '2px 2px 15px black',
+    // zIndex: 2,
   },
   text: {
     textAlign: 'center',

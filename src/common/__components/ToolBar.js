@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { cmdToolbar, setSortMode, setMapView } from '../app/actions';
+import { setCommand, setSortMode, setMapView } from '../app/actions';
 import { findNameByUrl } from '../__lib/find';
-import { View, Text, IconButton } from '../components';
-import { deleteConfirm } from './Dialogs';
-import { opts, mainCSS, colors, iconStyles, iconColors } from '../styles';
+import { View, Text, IconButton, Dialogs } from '../components';
+import { opts, mainCSS, colors, iconColors } from '../styles';
 import os from '../os';
 
 const setHighlight = (icon, props) =>
@@ -16,9 +15,9 @@ const icons = {
   // home: { key: 'home', title: 'Home', name: 'md-home', to: '/' },
   // menu: { key: 'menu', title: 'Menu', name: 'md-menu', act: 'toggleMenu' },
   back: { key: 'back', title: 'Back', name: 'md-arrow-back', act: 'goBack' },
-  add: { key: 'add', title: 'Add', name: 'md-add-circle' },
-  remove: { key: 'remove', title: 'Remove', name: 'md-remove-circle', confirm: true, dis: true },
-  edit: { key: 'edit', title: 'Edit', name: 'md-edit', dis: true},
+  add: { key: 'add', title: 'Add', name: 'md-add-circle', cmd: 'pre_insert' },
+  remove: { key: 'remove', title: 'Remove', name: 'md-remove-circle', confirm: 'deleteConfirm', dis: true },
+  edit: { key: 'edit', title: 'Edit', name: 'md-edit', cmd: 'pre_update', dis: true},
   map: { key: 'map', title: 'Map view', name: 'md-public' },
   addCoords: { key: 'addCoords', title: 'Add coords', name: 'md-add-location', act: 'addCoords' },
   editCoords: { key: 'editCoords', title: 'Edit coords', name: 'md-edit-location', act: 'editCoords' },
@@ -35,31 +34,32 @@ const icons = {
 
 const ToolBar = props => {
   let {
-    history,
-    urlParts,
-    activeEntry,
-    sortMode,
-    layout,
-    categories,
-    locations,
-    cmdToolbar,
-    setSortMode,
-    setMapView,
-  } = props,
+      history,
+      urlParts,
+      entry,
+      sortMode,
+      layout,
+      categories,
+      locations,
+      setCommand,
+      setSortMode,
+      setMapView,
+    } = props,
     path = urlParts[0],
     // subTitle = urlParts[2],
     // _home = path === '/',
     _cats = path === '/categories',
     _locs = path === '/locations',
     _map = path === '/map',
-    entryName = activeEntry ? activeEntry.name : '',
-    notList = activeEntry && !entryName,
+    entryName = entry ? entry.name : '',
+    notList = entry && !entryName,
     subTitle,
     subTitleCSS;
 
   // prettier-ignore
-  if (activeEntry && activeEntry.manual) {
-    subTitle = `${activeEntry.latitude.toPrecision(7)}, ${activeEntry.longitude.toPrecision(7)}`;
+  if (entry && entry.region && entry.region.manual) {
+    let {region} = entry
+    subTitle = `${region.latitude.toPrecision(7)}, ${region.longitude.toPrecision(7)}`;
   } else {
     subTitle = entryName || findNameByUrl(urlParts, { categories, locations });
   }
@@ -95,10 +95,9 @@ const ToolBar = props => {
   const __cmd = icon => {
     if (icon.to) return history.push(icon.to);
     if (icon.act) return actions[icon.act](icon);
-    let cb = () => cmdToolbar({ cmd: icon.key, path, activeEntry });
+    let cb = () => setCommand({ name: icon.cmd || icon.key, path, entry });
     if (icon.confirm) {
-      // console.log('activeEntry', activeEntry);
-      deleteConfirm(entryName, cb);
+      Dialogs[icon.confirm](entryName, cb);
     } else cb();
   };
 
@@ -111,14 +110,8 @@ const ToolBar = props => {
       ? typeof color === 'function' ? color(icon, props) : color
       : dis ? iconColors.disabled : iconColors.main;
 
-    // if (color) {
-    //   if (typeof color === 'function') color=color(icon)
-    // } else if(dis) color= iconColors.disabled
-    // else color= iconColors.main
-
     let set = {
-      style: { ...iconStyles.header },
-      backgroundColor: iconColors.bgMain,
+      // backgroundColor: iconColors.bgMain,
       color,
       name: icon.name,
       title: icon.title,
@@ -130,10 +123,9 @@ const ToolBar = props => {
   };
 
   let _list = _cats || _locs,
-    _edit = _list && activeEntry;
+    _edit = _list && entry;
   return (
     <View style={mainCSS.between}>
-
       <View style={mainCSS.centerRow}>
         <IconButton {...iconSet('back')} />
         <Text style={[mainCSS.subTitle, { color: colors.light }, subTitleCSS]}>
@@ -151,19 +143,18 @@ const ToolBar = props => {
         {_map && <IconButton {...iconSet('HYBRID')} />}
         {_map && <IconButton {...iconSet('TERRAIN')} />}
       </View>
-
     </View>
   );
 };
 
 export default connect(
   ({ app, categories, locations }) => ({
-    activeEntry: app.activeEntry,
+    entry: app.entry,
     sortMode: app.sortMode,
     mapViewMode: app.mapViewMode,
-    layout: app.layout,
+    // layout: app.layout,
     categories,
     locations,
   }),
-  { cmdToolbar, setSortMode, setMapView }
+  { setCommand, setSortMode, setMapView }
 )(ToolBar);

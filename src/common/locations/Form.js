@@ -2,7 +2,7 @@ import React from 'react';
 import { Form as BaseForm, View, TextInput, Picker, IconButton } from '../components';
 import { removeSpecial } from '../__lib/utils';
 import validator from '../__lib/validator';
-import { colors, mainCSS } from '../styles';
+import { mainCSS } from '../styles';
 
 const coordsToUrl = ({ coords, zoom }) => {
   coords = coords.value;
@@ -17,14 +17,50 @@ const coordsToUrl = ({ coords, zoom }) => {
   return url;
 };
 
-const Form = ({ fields, mode, onSubmit, propsTextInput, categories, history }) => {
+const cmdCoordsToMap = ({ fields, mode, setCommand, command, history }) => {
+  setCommand(Object.assign(command, { path: '/map', external: true }));
+  setTimeout(() => history.push(coordsToUrl(fields)), 0);
+};
+
+const onFormMount = ({ command, mode, entry, fields }) => {
+  if (command) {
+    let { path, isForm, external } = command;
+    if (external && isForm && path === '/map') {
+      let { region } = entry;
+      fields.__setState({
+        coords: `${region.latitude.toPrecision(7)}, ${region.longitude.toPrecision(7)}`,
+        zoom: region.zoom,
+      });
+    }
+  }
+};
+
+/*
+const onFormMount = ({ command, mode, entry, fields, setEntry }) => {
+  if (command) {
+    let { path, isForm, external } = command;
+    if (external && isForm && path === '/map') {
+      let { region } = entry,
+        location = command.entry || {};
+      // prettier-ignore
+      location.coords = `${region.latitude.toPrecision(7)}, ${region.longitude.toPrecision(7)}`
+      location.zoom = region.zoom;
+      fields.__setState(location);
+    }
+  }
+};
+*/
+
+const Form = props => {
+  let { fields, mode, onSubmit, propsTextInput, categories } = props,
+    addMode = mode === 'pre_insert';
   // console.log('locations form', fields, mode, categories);
   categories = [{ name: '-= No category =-', id: 0 }].concat(categories);
   return (
     <BaseForm style={[mainCSS.form, mainCSS.divider]} onSubmit={onSubmit}>
       <View style={mainCSS.formRow}>
         <TextInput
-          placeholder={mode === 'add' ? 'New entry' : 'Edit entry'}
+          placeholder={addMode ? 'New entry' : 'Edit entry'}
           style={mainCSS.input}
           {...fields.name}
           {...propsTextInput}
@@ -48,7 +84,7 @@ const Form = ({ fields, mode, onSubmit, propsTextInput, categories, history }) =
         <IconButton
           name="md-my-location"
           style={mainCSS.formBtn}
-          onPress={() => history.push(coordsToUrl(fields))}
+          onPress={() => cmdCoordsToMap(props)}
           title="Show on map"
         />
       </View>
@@ -66,12 +102,11 @@ const Form = ({ fields, mode, onSubmit, propsTextInput, categories, history }) =
           title="Save changes"
         />
         <IconButton
-          name={mode === 'add' ? 'md-add-circle' : 'md-edit'}
-          backgroundColor={colors.primary}
+          name={addMode ? 'md-add-circle' : 'md-edit'}
           onPress={onSubmit}
           style={mainCSS.formBtn}
+          title="Save"
         />
-
       </View>
     </BaseForm>
   );
@@ -87,5 +122,7 @@ Form.model = {
     { fn: 'zoom' },
   ],
 };
+
+Form.onFormMount = onFormMount;
 
 export default Form;

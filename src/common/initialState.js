@@ -6,9 +6,5 @@ export default {
     sortMode: { index: 1, name: 'sort-asc' },
     mapViewMode: 'STANDARD',
     layout: {},
-    // initialRegion: {
-    //   latitude: 36.5174,
-    //   longitude: -26.1953,
-    // },
   },
 };

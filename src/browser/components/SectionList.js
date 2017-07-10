@@ -1,32 +1,33 @@
 import React from 'react';
 
 export default ({
-  style,
+  contentContainerStyle,
   sections,
   renderSectionHeader,
   renderItem,
+  ItemSeparatorComponent,
+  SectionSeparatorComponent,
   keyExtractor = d => d.key,
-}) =>
-  <div>
-    {sections.map((section, i) =>
-      <div key={keyExtractor(section, i)}>
-        {renderSectionHeader({ section })}
-        {section.data.map((item, j) =>
-          <div key={keyExtractor(item, j)}>
-            {renderItem({ item, index: j })}
+}) => {
+  let sl = sections.length;
+  return (
+    <div style={contentContainerStyle}>
+      {sections.map((section, i) => {
+        let data = section.data,
+          dl = data.length;
+        return (
+          <div key={keyExtractor(section, i)}>
+            {renderSectionHeader({ section })}
+            {section.data.map((item, j) =>
+              <div key={keyExtractor(item, j)}>
+                {renderItem({ item, index: j })}
+                {j < dl - 1 && <ItemSeparatorComponent />}
+              </div>
+            )}
+            {i < sl - 1 && <SectionSeparatorComponent />}
           </div>
-        )}
-      </div>
-    )}
-  </div>;
-
-/*
-
-  <SectionList
-    sections={sections}
-    renderSectionHeader={renderSectionHeader}
-    renderItem={renderItem}
-    keyExtractor={item => item.id}
-  />
-
-*/
+        );
+      })}
+    </div>
+  );
+};

@@ -1,26 +1,24 @@
-// import Match from '../Match'
-// import Checkbox from '../Checkbox'
-// import Modal from './Modal'
-// import FileInput from './FileInput'
+/* browser components */
+
 // import DatePicker from './DatePicker'
-// export { Drawer } from './Drawer';
+// import Checkbox from '../Checkbox'
+// import FileInput from './FileInput'
 import FormWrapper from '../../common/__components/FormWrapper';
-// import SectionList from './SectionList';
+import Dialogs from '../../common/__components/Dialogs';
+import MapView, { MAP_TYPES, PROVIDER_GOOGLE } from 'react-native-maps';
 
-import MapView, { MAP_TYPES } from 'react-native-maps';
-export { MapView, MAP_TYPES };
+export { TouchLink } from './Link';
+export { Icon, IconButton, IconLink } from './Icons';
+// export { Drawer } from './Drawer';
+export { MapView, MAP_TYPES, PROVIDER_GOOGLE };
+export { Svg, G, Path, Circle, Rect, Text as SvgText } from 'react-native-svg';
 
-export { TouchLink, IconLinkPlatform, IconButtonPlatform } from './controls';
-export { Route, Redirect, withRouter, Link as NavLink } from 'react-router-native';
-export { View as Form } from 'react-native';
-export { Svg, G, Path } from 'react-native-svg';
-export { FormWrapper };
-
+export { FormWrapper, Dialogs };
 export {
   Text,
   View,
   Button,
-  ListView,
+  // ListView,
   // FlatList,
   SectionList,
   TextInput,
@@ -28,6 +26,8 @@ export {
   Image,
   TouchableHighlight,
   TouchableOpacity,
-  Alert,
   Picker,
+  Alert,
 } from 'react-native';
+export { View as Form } from 'react-native';
+export { Route, Redirect, withRouter, Link as NavLink } from 'react-router-native';

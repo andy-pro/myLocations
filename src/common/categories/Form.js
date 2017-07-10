@@ -4,19 +4,21 @@ import { removeSpecial } from '../__lib/utils';
 import { mainCSS } from '../styles';
 
 const Form = ({ fields, mode, onSubmit, propsTextInput }) => {
-  // console.log('form', fields, mode);
+  // console.log('form', fields.name.value, mode);
+  let addMode = mode === 'pre_insert';
   return (
     <BaseForm style={[mainCSS.form, mainCSS.divider]} onSubmit={onSubmit}>
       <View style={mainCSS.formRow}>
         <TextInput
-          placeholder={mode === 'add' ? 'New entry' : 'Edit entry'}
+          placeholder={addMode ? 'New entry' : 'Edit entry'}
           style={mainCSS.input}
           {...fields.name}
           {...propsTextInput}
         />
         <IconButton
-          name={mode === 'add' ? 'md-add-circle' : 'md-edit'}
+          name={addMode ? 'md-add-circle' : 'md-edit'}
           onPress={onSubmit}
+          title="Save"
         />
       </View>
     </BaseForm>

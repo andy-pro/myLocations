@@ -47,7 +47,7 @@ export const TouchableOpacity = TouchableHighlight;
 
 export const ScrollView = create('div', ['onPress']);
 
-export const Image = create('img', ['source', 'width']);
+export const Image = create('img', ['source']);
 
 const Select = create('select', ['selectedValue', 'onValueChange', 'enabled', '$ref']);
 
@@ -69,6 +69,44 @@ export class Picker extends Component {
   }
 }
 
+/* SVG */
+const svg_props = [
+  'x',
+  'y',
+  'cx',
+  'cy',
+  'r',
+  'width',
+  'height',
+  'stroke',
+  'strokeWidth',
+  'fill',
+];
+const svg_text_props = ['fontSize', 'fontWeight', 'textAnchor'];
+
 export const Svg = create('svg', ['width', 'height', 'viewBox']);
-export const G = create('g', ['fill', 'stroke', 'strokeWidth']);
+export const G = create('g', svg_props);
 export const Path = create('path', ['d']);
+export const Circle = create('circle', svg_props);
+export const Rect = create('rect', svg_props);
+export const SvgText = create('text', svg_props.concat(svg_text_props));
+
+/*
+Common props:
+'fill',
+'fillOpacity',
+'stroke',
+'strokeWidth',
+'strokeOpacity',
+'strokeLinecap',
+'strokeLinejoin'
+'strokeDasharray',
+'strokeDashoffset',
+'x',
+'y',
+'rotate',
+'scale',
+'origin',
+'originX',
+'originY'
+*/

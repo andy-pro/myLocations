@@ -1,4 +1,3 @@
-// @flow
 import { applyMiddleware, createStore, compose } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
 
@@ -12,11 +11,7 @@ const configureStore = options => {
 
   const reducer = configureReducer(initialState);
 
-  const middleware = configureMiddleware(
-    initialState,
-    platformDeps,
-    platformMiddleware
-  );
+  const middleware = configureMiddleware(initialState, platformDeps, platformMiddleware);
 
   const store = createStore(
     reducer,
@@ -25,13 +20,11 @@ const configureStore = options => {
   );
 
   if (platformDeps.storageEngine) {
-    persistStore(
-      store,
-      configureStorage(config.appName, platformDeps.storageEngine)
-    );
+    persistStore(store, configureStorage(config.appName, platformDeps.storageEngine));
   }
 
   // Enable hot reloading for reducers.
+  /*
   if (module.hot && typeof module.hot.accept === 'function') {
     let __reducer = () => {
       const configureReducer = require('./reducer').default;
@@ -46,6 +39,7 @@ const configureStore = options => {
       module.hot.accept(__reducer);
     }
   }
+  */
 
   return store;
 };

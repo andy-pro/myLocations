@@ -29,3 +29,4 @@ The stylization of the web components - [Fela](https://github.com/rofrischmann/f
 - `npm run android` install React Native Android application
 - `npm run native` start React Native application
 - `npm run apk` generating the release APK
+- `npm run log` starting the Android logger

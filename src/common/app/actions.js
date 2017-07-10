@@ -20,8 +20,8 @@ export const appShowMenu = menuShown => ({
   payload: menuShown,
 });
 
-export const setCurrentLocale = locale => ({
-  type: 'SET_CURRENT_LOCALE',
+export const setLocale = locale => ({
+  type: 'SET_LOCALE',
   payload: locale,
 });
 
@@ -46,13 +46,13 @@ export const setMapView = payload => ({
   payload,
 });
 
-export const setActiveEntry = payload => ({
-  type: 'SET_ACTIVE_ENTRY',
+export const setEntry = payload => ({
+  type: 'SET_ENTRY',
   payload,
 });
 
-export const resetActiveEntry = () => ({
-  type: 'RESET_ACTIVE_ENTRY',
+export const resetEntry = () => ({
+  type: 'RESET_ENTRY',
 });
 
 export const resetForm = () => ({
@@ -60,25 +60,22 @@ export const resetForm = () => ({
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-export const listAction = (list, payload, cmd, opts) => ({
-  type: 'epic/UPDATE',
-  list,
-  payload,
-  cmd, // add, edit, remove, purge, replace
-  opts,
-});
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-export const cmdToolbar = payload => {
-  let { cmd, path, activeEntry } = payload;
-  if (cmd === 'remove' || cmd === 'purge') {
-    let list = path.replace(/^\//, '');
-    return listAction(list, activeEntry.id, cmd);
+export const setCommand = payload => {
+  let { name, path, entry, opts } = payload;
+  if (name.startsWith('pre_')) {
+    payload.isForm = name === 'pre_insert' || name === 'pre_update';
+    return {
+      type: 'SET_COMMAND',
+      payload,
+    };
   }
-  payload.isForm = cmd === 'add' || cmd === 'edit';
+  if (name === 'remove') entry = entry.id;
   return {
-    type: 'CMD_TOOLBAR',
-    payload,
+    type: 'epic/UPDATE',
+    list: path.replace(/^\//, ''),
+    payload: entry,
+    cmd: name, // insert, update, remove, purge, replace
+    opts,
   };
 };
 

@@ -5,19 +5,18 @@ import ToolBar from './ToolBar';
 import { mainCSS, headerCSS } from '../styles';
 import os from '../../common/os';
 
-export default ({ history, urlParts }) => {
+export default props => {
   let { isBrowser, messages } = os,
-    [root, name] = urlParts,
+    [root, name] = props.urlParts,
     title = messages[`links.${name || 'home'}.title`];
-  // console.log('urlParts', urlParts);
   return (
     <View style={headerCSS.root}>
       {isBrowser && <Helmet title={title} />}
-      <View style={[mainCSS.full, mainCSS.limited]}>
+      <View style={[mainCSS.fullArea, mainCSS.limited]}>
         <Text style={headerCSS.title}>
           {title}
         </Text>
-        {root !== '/' && <ToolBar urlParts={urlParts} history={history} />}
+        {root !== '/' && <ToolBar {...props} />}
       </View>
     </View>
   );

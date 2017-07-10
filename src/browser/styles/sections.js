@@ -7,7 +7,7 @@ export const sectionsCSS = {
     borderBottomWidth: 1,
     paddingVertical: 10,
     paddingHorizontal: opts.gaps,
-    marginTop: 10,
+    // marginTop: 10,
   },
   title: {
     color: colors.main,
@@ -15,8 +15,8 @@ export const sectionsCSS = {
     fontWeight: '600',
   },
   item: {
-    borderTopColor: colors.silver,
-    borderTopWidth: 1,
+    // borderTopColor: colors.silver,
+    // borderTopWidth: 1,
     color: colors.dark,
     paddingVertical: 5,
     paddingHorizontal: opts.gaps,

@@ -5,39 +5,49 @@ export { headerCSS } from './header';
 export { sectionsCSS } from './sections';
 export { roundBtnCSS } from './roundBtn';
 
+// alignItems: flex-start | flex-end | center | baseline | stretch (default)
+// justifyContent: flex-start (default) | flex-end | center | space-between | space-around
+
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+};
+
+const center = {
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
 export const mainCSS = {
   root: {
+    ...col,
     fontFamily: opts.fontFamily,
-    // fontSize: opts.fontSize,
     backgroundColor: colors.background,
+    height: '100vh',
+    alignItems: 'center',
   },
-  main: {
-    display: 'flex',
-    // flexDirection: 'column',
-    justifyContent: 'center',
-    paddingTop: opts.headerH,
-    paddingBottom: opts.footerH,
-    minHeight: '100vh',
-  },
-  full: {
+  fullMain: {
+    // full along the main axis
+    ...col,
     flex: 1,
+    // width: '100%',
+  },
+  fullArea: {
+    // full on both axes
+    ...col,
+    flex: 1,
+    width: '100%',
+    position: 'relative',
+  },
+  fullWidth: {
+    position: 'relative',
     width: '100%',
   },
   limited: {
-    // display: 'flex',
-    position: 'relative',
-    flex: 1,
-    marginHorizontal: 'auto',
-    maxWidth: 450,
-    // height: '100%',
+    maxWidth: opts.maxWidth,
   },
   list: {
-    // display: 'flex',
-    // position: 'relative',
-    flex: 1,
-    paddingVertical: 20,
-    // marginHorizontal: 'auto',
-    // maxWidth: 450,
+    overflow: 'auto',
   },
   fullWindow: {
     flex: 1,
@@ -47,14 +57,11 @@ export const mainCSS = {
   fillContainer: {
     position: 'relative',
     width: '100%',
-    // height: 'initial',
     flex: 1,
   },
   center: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // position: 'relative',
+    flex: 1,
+    ...center,
   },
 
   text: {
@@ -73,26 +80,24 @@ export const mainCSS = {
     borderBottomWidth: 1,
     // marginBottom: 10,
   },
+  vgap20: {
+    marginTop: 20,
+  },
 
   row: {
     display: 'flex',
   },
   centerRow: {
     display: 'flex',
-    // align-items: flex-start | flex-end | center | baseline | stretch (default)
-    // alignItems: 'flex-start',
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...center,
   },
   between: {
     display: 'flex',
     alignItems: 'flex-start',
-    // justify-content: flex-start (default) | flex-end | center | space-between | space-around
     justifyContent: 'space-between',
   },
   pullRightRow: {
     display: 'flex',
-    // flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   pullRightCol: {
@@ -106,17 +111,16 @@ export const mainCSS = {
 
   /* form styles */
   form: {
-    paddingBottom: 10,
-    paddingHorizontal: opts.gaps - 5,
+    paddingVertical: 6,
+    paddingHorizontal: opts.gaps,
+    backgroundColor: colors.active,
   },
   formRow: {
     display: 'flex',
     alignItems: 'center',
     paddingVertical: 3,
   },
-  formBtn: {
-    marginHorizontal: 5,
-  },
+  formBtn: {},
   input: {
     ':focus': {
       borderColor: colors.mainTouch,
@@ -143,6 +147,7 @@ export const mainCSS = {
     cursor: 'pointer',
     // paddingHorizontal: 2,
     // paddingVertical: 1,
+    marginHorizontal: 5,
   },
 
   /* links */
@@ -180,15 +185,8 @@ export const mainCSS = {
   footer: {
     display: 'flex',
     backgroundColor: colors.footer,
-    bottom: 0,
-    position: 'fixed',
     width: '100%',
     height: opts.footerH,
-  },
-  fixedBottom: {
-    bottom: 0,
-    position: 'fixed',
-    width: '100%',
   },
   f_link: {
     color: colors.light,
@@ -213,12 +211,3 @@ export const checkboxCSS = {
 };
 
 mainCSS.picker = mainCSS.input;
-
-export const iconStyles = {
-  header: {
-    display: 'flex',
-    marginLeft: 5,
-    marginRight: 5,
-    // padding: 3,
-  },
-};

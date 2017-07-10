@@ -14,6 +14,7 @@ import os from '../common/os';
 const messages = new LocalizedStrings(require('../common/__messages'));
 
 /* platform dependencies */
+initialState.app.isNative = true;
 setupHardwareBackPress(os);
 os.isNative = true;
 os.messages = messages;
@@ -56,5 +57,4 @@ class Root extends React.Component {
   }
 }
 
-// AppRegistry.registerComponent(config.appName, () => () => <Root />);
 AppRegistry.registerComponent(config.appName, () => Root);

@@ -20,7 +20,7 @@ class App extends React.Component {
     this.props.appStart();
     if (config.hardwareBackPress) {
       os.subscribe('hardwareBackPress', () => {
-        if (this.props.cmdToolbar) {
+        if (this.props.command) {
           this.props.resetForm();
           return true;
         }
@@ -33,42 +33,60 @@ class App extends React.Component {
     this.props.appStop();
   }
 
-  shouldComponentUpdate({ cmdToolbar }) {
-    if (cmdToolbar !== this.props.cmdToolbar) {
-      // prevent re-render, but props must contain 'cmdToolbar'
-      return false;
-    }
-    // if (notify !== this.props.notify) {
-    //   showNotify(notify, this.props.messages)
-    //   return false
-    // }
-    return true;
+  shouldComponentUpdate(nextProps) {
+    // console.log('nextProps', Object.keys(nextProps.location));
+    // console.log('nextProps', nextProps.location.pathname);
+    return (
+      nextProps.layout !== this.props.layout ||
+      nextProps.location.pathname !== this.props.location.pathname ||
+      nextProps.dataReady !== this.props.dataReady
+    );
   }
+
+  // shouldComponentUpdate({ command }) {
+  //   if (command !== this.props.command) {
+  //     // prevent re-render, but props must contain 'command'
+  //     return false;
+  //   }
+  //   // if (notify !== this.props.notify) {
+  //   //   showNotify(notify, this.props.messages)
+  //   //   return false
+  //   // }
+  //   return true;
+  // }
 
   render() {
     // console.log('%cApp render', 'color:blue;font-weight:bold', this.props);
-    console.log('%cApp render', 'color:blue;font-weight:bold');
-    // <Page component={HomePage} />
-    let mainViewProps = { style: mainCSS.app };
+    let { layout, dataReady } = this.props,
+      props = { layout, dataReady },
+      mainViewProps = { style: mainCSS.fullMain };
     if (os.isNative) {
       mainViewProps.onLayout = e => this.props.appLayout(e.nativeEvent.layout);
     }
+    // console.log('App render', layout);
     return (
       <View {...mainViewProps}>
-        <Page path="/" exact component={HomePage} />
-        <Page path="/categories" component={CategoriesPage} />
-        <Page path="/locations/:category?" component={LocationsPage} />
-        <Page path="/map/:location?" component={MapPage} />
+        <Page path="/" exact component={HomePage} {...props} />
+        <Page path="/categories" component={CategoriesPage} {...props} />
+        <Page path="/locations/:category?" component={LocationsPage} {...props} />
+        <Page path="/map/:location?" component={MapPage} {...props} />
       </View>
     );
   }
 }
 
 export default withRouter(
-  connect(({ app }) => ({ cmdToolbar: app.cmdToolbar }), {
-    appStart,
-    appStop,
-    appLayout,
-    resetForm,
-  })(App)
+  connect(
+    ({ app }) => ({
+      command: app.command,
+      dataReady: app.dataReady,
+      layout: app.layout,
+    }),
+    {
+      appStart,
+      appStop,
+      appLayout,
+      resetForm,
+    }
+  )(App)
 );

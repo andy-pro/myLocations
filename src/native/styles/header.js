@@ -3,17 +3,18 @@ import { opts, colors } from '../../common/const';
 
 export const headerCSS = StyleSheet.create({
   root: {
+    alignItems: 'center',
     width: '100%',
     backgroundColor: colors.header,
-    // paddingHorizontal: opts.gaps,
     height: opts.headerH,
-    alignItems: 'center',
+    // paddingHorizontal: opts.gaps,
+    // zIndex: 2, // !!! ломает отображение даже с отключенным хидером !!!
   },
   title: {
     color: colors.light,
     fontSize: opts.fontSize * 1.4,
-    // lineHeight: '1',
-    marginBottom: -3,
     textAlign: 'center',
+    marginBottom: -3,
+    // lineHeight: '1',
   },
 });

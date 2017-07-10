@@ -51,18 +51,14 @@ function renderItem({ item }) {
 
         <View style={mainCSS.pullRightCol}>
           <View>
-            <Text style={styles.aux}>
-              Coordinates
-            </Text>
+            <Text style={styles.aux}>Coordinates</Text>
           </View>
           <View>
             <Text style={styles.extra}>
               {item.coords}
             </Text>
           </View>
-
         </View>
-
       </View>
     </TouchLink>
   );
@@ -72,32 +68,15 @@ function isDataChanged({ categories, locations }) {
   return categories !== this.props.categories || locations !== this.props.locations;
 }
 
-function onFormMount(props) {
-  // if (cmdToolbar && cmdToolbar.path === '/map' && mode === 'add') {
-  //   console.log('form on add map props', this.props);
-  // }
-  // console.log('onMount locations form props', props);
-  let { cmdToolbar, mode, entry, fields } = props;
-  if (cmdToolbar) {
-    let { external, path } = cmdToolbar;
-    if (external && mode === 'add' && path === '/map') {
-      fields.__setState({
-        coords: `${entry.latitude.toPrecision(7)}, ${entry.longitude.toPrecision(7)}`,
-        zoom: entry.zoom,
-      });
-    }
-  }
-}
-
-function onListMount({ cmdToolbar, resetActiveEntry }) {
-  if (cmdToolbar && cmdToolbar.external) return;
-  resetActiveEntry();
+function onListMount({ command, resetEntry }) {
+  if (command && command.external) return;
+  resetEntry();
 }
 
 export default EditedList({
   listName: 'locations',
   stateProps: ['categories', 'locations'],
-  Form: FormHelper(Form, onFormMount),
+  Form: FormHelper(Form),
   onListMount,
   renderSectionHeader,
   renderItem,

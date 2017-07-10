@@ -6,55 +6,46 @@ export { headerCSS } from './header';
 export { sectionsCSS } from './sections';
 export { roundBtnCSS } from './roundBtn';
 
-/*
-justifyContent: 'flex-start', 'flex-end', 'center', 'space-between', 'space-around'
-*/
+// alignItems: flex-start | flex-end | center | baseline | stretch (default)
+// justifyContent: flex-start (default) | flex-end | center | space-between | space-around
 
+const center = {
+  alignItems: 'center',
+  justifyContent: 'center',
+};
 export const mainCSS = StyleSheet.create({
-  app: {
-    flex: 1,
-  },
   root: {
     flex: 1,
     backgroundColor: colors.background,
     alignItems: 'center',
   },
-  main: {
+  fullMain: {
+    // full along the main axis
     flex: 1,
-    width: '100%',
-    // alignItems: 'center',
-    // backgroundColor: colors.background,
   },
-  full: {
+  fullArea: {
+    // full on both axes
     flex: 1,
     width: '100%',
-    // alignItems: 'center',
-    // backgroundColor: colors.background,
+  },
+  fullWidth: {
+    width: '100%',
   },
   limited: {
-    // flex: 1,
     maxWidth: opts.maxWidth,
-    // width: '100%',
-    // borderWidth: 1,
-    // borderColor: 'black',
-    // backgroundColor: 'yellow',
-    // justifyContent: 'space-between',
   },
   list: {
-    flex: 1,
+    // overflow: 'auto',
   },
   fullWindow: {
     width: '100%',
     height: '100%',
   },
   center: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1,
+    ...center,
   },
   fillContainer: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  fill: {
     ...StyleSheet.absoluteFillObject,
   },
 
@@ -65,9 +56,6 @@ export const mainCSS = StyleSheet.create({
   subTitle: {
     fontSize: opts.fontSize,
     fontWeight: '600',
-    // color: colors.light,
-    // lineHeight: opts.fontSize + 'px',
-    // flexWrap: 'wrap',
   },
 
   divider: {
@@ -77,19 +65,13 @@ export const mainCSS = StyleSheet.create({
 
   row: {
     flexDirection: 'row',
-    // justifyContent: 'center',
-    // align-items: flex-start | flex-end | center | baseline | stretch (default)
-    // alignItems: 'flex-start',
-    // alignItems: 'center',
   },
   centerRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...center,
   },
   between: {
     flexDirection: 'row',
-    // alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
   pullRightRow: {
@@ -148,6 +130,7 @@ export const mainCSS = StyleSheet.create({
     padding: 12,
     width: 80,
     justifyContent: 'center',
+    ...colors.border,
   },
 
   /* links */
@@ -165,11 +148,8 @@ export const mainCSS = StyleSheet.create({
 
   /* footer */
   footer: {
-    // display: 'flex',
-    backgroundColor: colors.footer,
-    // bottom: 0,
-    // position: 'fixed',
     width: '100%',
+    backgroundColor: colors.footer,
     height: opts.footerH,
   },
   f_link: {
@@ -195,21 +175,3 @@ export const checkboxCSS = StyleSheet.create({
     paddingRight: 10,
   },
 });
-
-export const iconStyles = {
-  header: {
-    // width: 38,
-    // paddingLeft: 11,
-    // paddingHorizontal: 10,
-  },
-
-  // native set 1
-  // size: 30,
-  // paddingLeft: 12,
-  // paddingRight: 6,
-
-  // native set 2
-  // size: 30,
-  // paddingLeft: 8,
-  // paddingRight: 0,
-};

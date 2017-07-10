@@ -1,4 +1,5 @@
 import { REHYDRATE } from 'redux-persist/constants';
+import __initialState from '../initialState';
 
 const initialState = {
   currentTheme: 'defaultTheme',
@@ -9,15 +10,14 @@ const initialState = {
   started: false,
   dataReady: false,
   listName: '',
-  activeEntry: null,
-  cmdToolbar: null,
+  entry: null,
+  command: null,
 
   currentLocale: null,
   defaultLocale: null,
   locales: null,
   messages: null,
   layout: {},
-  initialRegion: null,
   mapViewMode: 'STANDARD',
 };
 
@@ -64,7 +64,11 @@ const reducer = (state = initialState, action) => {
       return { ...state, started: true };
 
     case 'APP_LAYOUT':
-      return { ...state, layout: payload };
+      // return payload ? { ...state, layout: payload } : state;
+      if (payload.aspectRatio && payload.aspectRatio !== state.layout.aspectRatio) {
+        return { ...state, layout: payload };
+      }
+      return state;
 
     case 'SET_SORT_MODE':
       let name = sortModes[payload];
@@ -73,23 +77,25 @@ const reducer = (state = initialState, action) => {
     case 'SET_MAP_VIEW':
       return { ...state, mapViewMode: payload };
 
-    case 'CMD_TOOLBAR':
-      return { ...state, cmdToolbar: payload };
+    case 'SET_COMMAND':
+      return { ...state, command: payload };
 
     case 'RESET_FORM':
-      return { ...state, cmdToolbar: null };
+      return { ...state, command: null };
 
-    case 'SET_ACTIVE_ENTRY':
+    case 'SET_ENTRY':
       let { listName, entry } = payload;
-      return { ...state, listName, activeEntry: entry };
+      if (listName === 'map' && state.command && state.command.name === 'pre_update') {
+        entry = Object.assign({}, state.entry, entry);
+      }
+      return { ...state, listName, entry };
 
-    case 'RESET_ACTIVE_ENTRY':
+    case 'RESET_ENTRY':
       return {
         ...state,
         listName: '',
-        activeEntry: null,
-        cmdToolbar: null,
-        // region: null,
+        entry: null,
+        command: null,
       };
 
     case 'categories/UPDATED':
@@ -97,23 +103,20 @@ const reducer = (state = initialState, action) => {
     case 'locations/UPDATED':
     case 'notify/locations/UPDATED':
       if (action.cmd === 'remove') {
-        state = { ...state, activeEntry: null };
-        if (state.cmdToolbar && state.cmdToolbar.name === 'edit') state.cmdToolbar = null;
+        state = { ...state, entry: null };
+        if (state.command && state.command.name === 'pre_update') state.command = null;
       }
       return state;
 
     // process all the keys listed in 'config/storage.path
     case REHYDRATE:
-      let { app } = payload;
-      if (app) {
-        state = Object.assign({}, state, app, { dataReady: true });
-        // if (app.currentLocale) state = setLocale(state, app.currentLocale);
-        // if (app.sortMode) state = { ...state, sortMode: app.sortMode };
-        // if (app.mapViewMode) state = { ...state, mapViewMode: app.mapViewMode };
-      }
-      return state;
+      let app = payload.app || __initialState.app;
+      return Object.assign({}, state, app, { dataReady: true });
+    // if (app.currentLocale) state = setLocale(state, app.currentLocale);
+    // if (app.sortMode) state = { ...state, sortMode: app.sortMode };
+    // if (app.mapViewMode) state = { ...state, mapViewMode: app.mapViewMode };
 
-    case 'SET_CURRENT_LOCALE':
+    case 'SET_LOCALE':
       return setLocale(state, payload);
 
     default:

@@ -55,7 +55,7 @@ export default EditedList({
   listName: 'categories',
   stateProps: ['categories'],
   Form: FormHelper(Form),
-  onListMount: props => props.resetActiveEntry(),
+  onListMount: props => props.resetEntry(),
   renderSectionHeader,
   renderItem,
   isDataChanged,

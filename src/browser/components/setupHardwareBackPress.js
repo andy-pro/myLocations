@@ -3,14 +3,14 @@
       // console.log('e.keyCode', e.keyCode);
 
       // esc
-      if (e.keyCode == 27 && this.props.cmdToolbar) { 
+      if (e.keyCode == 27 && this.props.command) { 
         this.props.resetMenu()
         return false;
       }
 
       // delete
-      if (e.keyCode == 46 && this.props.activeEntry) {
-        let { entry } = this.props.activeEntry
+      if (e.keyCode == 46 && this.props.entry) {
+        let { entry } = this.props.entry
         deleteConfirm(entry.name, () => this.props.categoryAction(entry.id, 'remove'))
         return false;
       }

@@ -89,10 +89,10 @@ export const slugifyCategory = category =>
 export const cmdUpdateLocal = (list, { cmd, payload }) => {
   // console.log('utils', cmd, payload);
   switch (cmd) {
-    case 'add':
+    case 'insert':
       return pushItem(list, payload);
 
-    case 'edit':
+    case 'update':
       let { __id } = payload;
       delete payload.__id;
       return updateItemById(list, __id, payload);
